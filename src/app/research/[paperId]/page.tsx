@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { notFound } from "next/navigation";
+import { PaperViewTracker } from "@/components/papers/paper-view-tracker";
+import { DownloadButton } from "@/components/papers/download-button";
 
 export const dynamic = "force-dynamic";
 
@@ -71,17 +73,11 @@ export default async function PaperDetailPage({
             <CardTitle>Full Paper</CardTitle>
           </CardHeader>
           <CardContent>
-            <a
-              href={paper.pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Download PDF
-            </a>
+            <DownloadButton pdfUrl={paper.pdfUrl} paperId={paper.paperId} />
           </CardContent>
         </Card>
       )}
+      <PaperViewTracker paperId={paper.paperId} />
     </div>
   );
 }
