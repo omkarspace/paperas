@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  GUEST
+  AUTHOR
+  REVIEWER
+  EDITOR
+  ADMIN
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  password       String?
+  image          String?
+  role           UserRole  @default(AUTHOR)
+  institution    String?
+  bio            String?
+  orcid          String?
+  googleId       String?   @unique
+  emailVerified  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  papers        Paper[]
+  reviews       Review[]
+  notifications Notification[]
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum PaperStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  REVISION_REQUESTED
+  ACCEPTED
+  PUBLISHED
+  REJECTED
+}
+
+model Paper {
+  id                 String       @id @default(cuid())
+  paperId            String       @unique
+  title              String
+  abstract           String
+  keywords           String
+  pdfUrl             String?
+  supplementaryUrls String
+  status             PaperStatus  @default(DRAFT)
+  submissionDate    DateTime?
+  publicationDate   DateTime?
+  volume            Int?
+  issue             Int?
+  categoryId        String?
+  authorId          String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  author    User         @relation(fields: [authorId], references: [id])
+  category  Category?    @relation(fields: [categoryId], references: [id])
+  reviews         Review[]
+  paperAnalytics PaperAnalytics?
+}
+
+enum ReviewRecommendation {
+  ACCEPT
+  MINOR_REVISION
+  MAJOR_REVISION
+  REJECT
+}
+
+model Review {
+  id                String               @id @default(cuid())
+  paperId           String
+  reviewerId        String
+  comments          String
+  recommendation    ReviewRecommendation
+  isBlind           Boolean              @default(false)
+  rating            Int?
+  originalityRating Int?
+  qualityRating     Int?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  paper    Paper @relation(fields: [paperId], references: [id])
+  reviewer User  @relation(fields: [reviewerId], references: [id])
+}
+
+model JournalIssue {
+  id              String   @id @default(cuid())
+  volume          Int
+  issue           Int
+  publicationDate DateTime
+  isPublished     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([volume, issue])
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  papers Paper[]
+}
+
+enum NotificationType {
+  SUBMISSION_RECEIVED
+  REVIEW_COMPLETED
+  REVISION_REQUESTED
+  PAPER_ACCEPTED
+  PAPER_PUBLISHED
+  REVIEWER_ASSIGNED
+  USER_REGISTERED
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  link      String?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model PaperAnalytics {
+  id        String   @id @default(cuid())
+  paperId   String   @unique
+  views     Int      @default(0)
+  downloads Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  paper Paper @relation(fields: [paperId], references: [id])
+}
