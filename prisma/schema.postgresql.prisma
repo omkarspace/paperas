@@ -103,6 +103,8 @@ model Paper {
   author    User         @relation(fields: [authorId], references: [id])
   category  Category?    @relation(fields: [categoryId], references: [id])
   reviews   Review[]
+
+  paperAnalytics PaperAnalytics?
 }
 
 enum ReviewRecommendation {
@@ -179,4 +181,6 @@ model PaperAnalytics {
   downloads Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  paper Paper @relation(fields: [paperId], references: [id])
 }
