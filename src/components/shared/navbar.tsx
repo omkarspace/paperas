@@ -114,7 +114,7 @@ export function Navbar() {
         </div>
 
         <button
-          className="md:hidden ml-auto"
+          className="md:hidden ml-auto p-3 min-h-[44px] min-w-[44px]"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
@@ -128,17 +128,17 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="block py-2 text-sm font-medium"
+              className="block py-3 text-sm font-medium"
               onClick={() => setIsOpen(false)}
             >
               {item.name}
             </Link>
           ))}
           <div className="border-t mt-4 pt-4">
-            <Link href="/auth/login" className="block py-2 text-sm font-medium">
+            <Link href="/auth/login" className="block py-3 text-sm font-medium">
               Login
             </Link>
-            <Link href="/auth/register" className="block py-2 text-sm font-medium">
+            <Link href="/auth/register" className="block py-3 text-sm font-medium">
               Register
             </Link>
           </div>
