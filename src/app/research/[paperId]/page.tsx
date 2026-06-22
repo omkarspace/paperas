@@ -17,7 +17,7 @@ export default async function PaperDetailPage({
 
   const paper = await db.paper.findUnique({
     where: { paperId },
-    include: { author: true, category: true, reviews: true },
+    include: { author: true, category: true, reviews: true, coAuthors: true },
   });
 
   if (!paper) {
@@ -41,6 +41,11 @@ export default async function PaperDetailPage({
         <p className="text-muted-foreground">
           {paper.author?.name} • {paper.author?.institution}
         </p>
+        {paper.coAuthors.length > 0 && (
+          <p className="text-sm text-muted-foreground">
+            with {paper.coAuthors.sort((a, b) => a.order - b.order).map(ca => ca.name).join(", ")}
+          </p>
+        )}
         {paper.publicationDate && (
           <p className="text-sm text-muted-foreground mt-2">
             Published: {new Date(paper.publicationDate).toLocaleDateString()}
@@ -78,7 +83,10 @@ export default async function PaperDetailPage({
             <CitationDialog
               paper={{
                 title: paper.title,
-                authors: [{ name: paper.author?.name || "Unknown" }],
+                authors: [
+                  { name: paper.author?.name || "Unknown" },
+                  ...paper.coAuthors.sort((a, b) => a.order - b.order).map(ca => ({ name: ca.name })),
+                ],
                 doi: paper.doi,
                 publicationDate: paper.publicationDate?.toISOString() || null,
                 volume: paper.volume,

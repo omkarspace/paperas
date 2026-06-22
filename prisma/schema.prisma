@@ -32,6 +32,7 @@ model User {
   updatedAt      DateTime  @updatedAt
 
   papers        Paper[]
+  coAuthors     CoAuthor[]
   reviews       Review[]
   notifications Notification[]
   accounts      Account[]
@@ -105,7 +106,26 @@ model Paper {
   author    User         @relation(fields: [authorId], references: [id])
   category  Category?    @relation(fields: [categoryId], references: [id])
   reviews         Review[]
+  coAuthors       CoAuthor[]
   paperAnalytics PaperAnalytics?
+}
+
+model CoAuthor {
+  id          String   @id @default(cuid())
+  paperId     String
+  userId      String?
+  name        String
+  email       String?
+  affiliation String?
+  orcidId     String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  paper Paper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  user  User?  @relation(fields: [userId], references: [id])
+
+  @@unique([paperId, email])
+  @@index([paperId])
 }
 
 enum ReviewRecommendation {
@@ -192,4 +212,17 @@ model PaperAnalytics {
   updatedAt DateTime @updatedAt
 
   paper Paper @relation(fields: [paperId], references: [id])
+}
+
+model EditorialBoardMember {
+  id          String   @id @default(cuid())
+  name        String
+  affiliation String
+  role        String   @default("Editorial Board Member")
+  bio         String?
+  imageUrl    String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
