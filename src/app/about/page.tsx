@@ -7,7 +7,7 @@ export default function AboutPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">About the Journal</h2>
           <p className="text-muted-foreground">
-            Research Verse Journal and Publication House of India is a
+            Paperas is an open source
             peer-reviewed academic journal dedicated to publishing quality
             research across various disciplines. Established with the mission
             to advance knowledge and foster scholarly excellence, we provide

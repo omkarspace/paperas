@@ -25,15 +25,15 @@ export default async function AdminSettingsPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Journal Name</Label>
-              <Input id="name" defaultValue="Research Verse Journal" />
+              <Input id="name" defaultValue="Paperas" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="issn">ISSN</Label>
-              <Input id="issn" defaultValue="RVJ-2026-0001" />
+              <Input id="issn" defaultValue="PAP-2026-0001" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Editor Email</Label>
-              <Input id="email" type="email" defaultValue="editor@researchverse.in" />
+              <Input id="email" type="email" defaultValue="editor@paperas.dev" />
             </div>
             <Button>Save Changes</Button>
           </CardContent>

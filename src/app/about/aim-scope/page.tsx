@@ -7,7 +7,7 @@ export default function AimScopePage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Journal Aim</h2>
           <p className="text-muted-foreground">
-            Research Verse Journal aims to provide a platform for the
+            Paperas aims to provide a platform for the
             dissemination of original research findings across multiple
             disciplines. We are committed to fostering intellectual discourse
             and promoting evidence-based research that contributes to

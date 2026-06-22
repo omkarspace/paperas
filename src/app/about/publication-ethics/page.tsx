@@ -7,7 +7,7 @@ export default function PublicationEthicsPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Ethical Policy</h2>
           <p className="text-muted-foreground">
-            Research Verse Journal is committed to maintaining the highest
+            Paperas is committed to maintaining the highest
             standards of publication ethics. We follow the guidelines provided
             by the Committee on Publication Ethics (COPE) and expect all
             authors, reviewers, and editors to adhere to these standards.

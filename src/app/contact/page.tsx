@@ -57,7 +57,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium">Address</p>
                     <p className="text-sm text-muted-foreground">
-                      Research Verse Journal
+                      Paperas
                       <br />
                       India
                     </p>

@@ -39,7 +39,7 @@ export function Navbar() {
       <div className="container flex h-16 items-center">
         <Link href="/" className="flex items-center space-x-2">
           <BookOpen className="h-6 w-6" />
-          <span className="text-xl font-bold">Research Verse</span>
+          <span className="text-xl font-bold">Paperas</span>
         </Link>
 
         <nav className="hidden md:flex ml-8">

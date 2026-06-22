@@ -21,7 +21,7 @@ export default async function HomePage() {
         <div className="container">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              Research Verse Journal
+              Paperas
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
               A peer-reviewed academic journal dedicated to publishing quality
