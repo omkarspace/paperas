@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { notFound } from "next/navigation";
 import { PaperViewTracker } from "@/components/papers/paper-view-tracker";
 import { DownloadButton } from "@/components/papers/download-button";
+import { CitationDialog } from "@/components/papers/citation-dialog";
 
 export const dynamic = "force-dynamic";
 
@@ -72,8 +73,18 @@ export default async function PaperDetailPage({
           <CardHeader>
             <CardTitle>Full Paper</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-2">
             <DownloadButton pdfUrl={paper.pdfUrl} paperId={paper.paperId} />
+            <CitationDialog
+              paper={{
+                title: paper.title,
+                authors: [{ name: paper.author?.name || "Unknown" }],
+                doi: paper.doi,
+                publicationDate: paper.publicationDate?.toISOString() || null,
+                volume: paper.volume,
+                issue: paper.issue,
+              }}
+            />
           </CardContent>
         </Card>
       )}
