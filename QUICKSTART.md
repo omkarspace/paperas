@@ -2,7 +2,7 @@
 
 ## For New Developers
 
-This guide gets you up and running with the Research Verse Journal platform in 10 minutes.
+This guide gets you up and running with the Paperas platform in 10 minutes.
 
 ---
 
@@ -18,8 +18,8 @@ This guide gets you up and running with the Research Verse Journal platform in 1
 
 ```bash
 # Clone repository
-git clone https://github.com/your-repo/research-verse.git
-cd research-verse
+git clone https://github.com/your-repo/paperas.git
+cd paperas
 
 # Install dependencies
 npm install
@@ -38,7 +38,7 @@ Edit `.env.local`:
 
 ```env
 # Required
-DATABASE_URL="postgresql://user:password@localhost:5432/research_verse"
+DATABASE_URL="postgresql://user:password@localhost:5432/paperas"
 AUTH_SECRET="generate-a-random-32-char-string"
 
 # Optional (for now, leave empty)

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Guidelines and configuration for development agents working on the Research Verse Journal platform.
+Guidelines and configuration for development agents working on the Paperas platform.
 
 **IMPORTANT**: This is a plan-only phase. DO NOT make any edits or system changes until explicitly instructed by the user.
 

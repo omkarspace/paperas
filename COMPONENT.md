@@ -2,7 +2,7 @@
 
 ## Overview
 
-Complete component structure for the Research Verse Journal platform using Shadcn UI.
+Complete component structure for the Paperas platform using Shadcn UI.
 
 **Theme**: Shadcn default (DO NOT MODIFY)
 
@@ -119,7 +119,7 @@ export function Footer() {
   return (
     <footer className="border-t py-8">
       <div className="container">
-        <p>© 2026 Research Verse Journal</p>
+        <p>© 2026 Paperas</p>
         <p>ISSN: XXXX-XXXX</p>
       </div>
     </footer>

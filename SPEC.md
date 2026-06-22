@@ -1,4 +1,4 @@
-# Research Verse Journal Platform - Technical Specification
+# Paperas - Technical Specification
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@
 
 ## 1. Overview
 
-- **Project Name**: Research Verse Journal And Publication House Of India
+- **Project Name**: Paperas
 - **Type**: Academic Publishing Platform (ISSN-Licensed Journal)
 - **Tech Stack**: Next.js 15, TypeScript, Tailwind CSS, Shadcn UI, Prisma, PostgreSQL, Auth.js, AWS S3, Typesense, Gemini AI
 - **Base Theme**: Shadcn default (DO NOT MODIFY)
@@ -76,7 +76,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 | Setting | Value |
 |---------|-------|
-| Journal Name | Research Verse Journal And Publication House Of India |
+| Journal Name | Paperas |
 | ISSN Format | `RVJ-YYYY-XXXX` (e.g., RVJ-2026-0001) |
 | Default Category | General |
 | Max PDF Size | 50MB |
