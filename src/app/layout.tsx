@@ -8,6 +8,12 @@ export const metadata: Metadata = {
   title: "Paperas - Open Source Academic Publishing Platform",
   description:
     "Paperas - An open source academic publishing platform for scholarly journals.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    title: "Paperas",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({
@@ -23,6 +29,17 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </ThemeProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('/sw.js');
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );
