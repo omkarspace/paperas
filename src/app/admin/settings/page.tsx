@@ -32,6 +32,11 @@ export default async function AdminSettingsPage() {
               <Input id="issn" defaultValue="PAP-2026-0001" />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="doiPrefix">DOI Prefix</Label>
+              <Input id="doiPrefix" defaultValue={process.env.DOI_PREFIX || "xxxx"} placeholder="e.g., 1234" />
+              <p className="text-xs text-muted-foreground">Your Crossref DOI prefix (without '10.')</p>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="email">Editor Email</Label>
               <Input id="email" type="email" defaultValue="editor@paperas.dev" />
             </div>

@@ -91,6 +91,7 @@ model Paper {
   keywords           String
   pdfUrl             String?
   supplementaryUrls String
+  doi              String?
   status             PaperStatus  @default(DRAFT)
   submissionDate    DateTime?
   publicationDate   DateTime?
