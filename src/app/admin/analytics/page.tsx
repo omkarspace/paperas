@@ -2,7 +2,8 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, Download, FileText, Users } from "lucide-react";
+import { FileText, Users } from "lucide-react";
+import { AnalyticsCharts } from "@/components/admin/analytics-charts";
 
 export const dynamic = "force-dynamic";
 
@@ -10,12 +11,24 @@ export default async function AdminAnalyticsPage() {
   const session = await auth();
   if (!session || session.user.role !== "ADMIN") redirect("/");
 
-  const [papers, users, issues, publishedPapers] = await Promise.all([
-    db.paper.count(),
-    db.user.count(),
-    db.journalIssue.count(),
-    db.paper.count({ where: { status: "PUBLISHED" } }),
-  ]);
+  const [totalPapers, totalUsers, issues, publishedPapers, totalReviews, topPapers] =
+    await Promise.all([
+      db.paper.count(),
+      db.user.count(),
+      db.journalIssue.count(),
+      db.paper.count({ where: { status: "PUBLISHED" } }),
+      db.review.count(),
+      db.paper.findMany({
+        where: { paperAnalytics: { views: { gt: 0 } } },
+        orderBy: { paperAnalytics: { views: "desc" } },
+        take: 5,
+        select: { title: true, paperAnalytics: { select: { views: true } } },
+      }),
+    ]);
+
+  const totalAuthors = await db.user.count({
+    where: { role: "AUTHOR" },
+  });
 
   return (
     <div>
@@ -28,7 +41,7 @@ export default async function AdminAnalyticsPage() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{papers}</div>
+            <div className="text-2xl font-bold">{totalPapers}</div>
           </CardContent>
         </Card>
         <Card>
@@ -46,7 +59,7 @@ export default async function AdminAnalyticsPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{users}</div>
+            <div className="text-2xl font-bold">{totalUsers}</div>
           </CardContent>
         </Card>
         <Card>
@@ -60,14 +73,19 @@ export default async function AdminAnalyticsPage() {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Papers</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Detailed analytics coming soon.</p>
-        </CardContent>
-      </Card>
+      <AnalyticsCharts
+        dailyViews={[]}
+        topPapers={topPapers.map((p) => ({
+          title: p.title.length > 30 ? p.title.slice(0, 30) + "..." : p.title,
+          views: p.paperAnalytics?.views ?? 0,
+        }))}
+        editorialStats={[
+          { label: "Total Papers", value: totalPapers },
+          { label: "Published", value: publishedPapers },
+          { label: "Authors", value: totalAuthors },
+          { label: "Reviews", value: totalReviews },
+        ]}
+      />
     </div>
   );
 }
