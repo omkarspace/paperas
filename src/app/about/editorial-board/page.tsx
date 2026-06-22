@@ -1,81 +1,61 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { db } from "@/lib/db"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function EditorialBoardPage() {
-  const board = {
-    chiefEditor: {
-      name: "Dr. Editorial Name",
-      affiliation: "University Name",
-      email: "editor@researchverse.in",
-    },
-    managingEditors: [
-      {
-        name: "Dr. Managing Editor 1",
-        affiliation: "Institution Name",
-      },
-      {
-        name: "Dr. Managing Editor 2",
-        affiliation: "Institution Name",
-      },
-    ],
-    editorialBoard: [
-      { name: "Dr. Member 1", affiliation: "University of Example" },
-      { name: "Dr. Member 2", affiliation: "Institute of Research" },
-      { name: "Dr. Member 3", affiliation: "College of Sciences" },
-      { name: "Dr. Member 4", affiliation: "Technical Institute" },
-      { name: "Dr. Member 5", affiliation: "Research Center" },
-    ],
-  };
+export const dynamic = "force-dynamic"
+
+export default async function EditorialBoardPage() {
+  const members = await db.editorialBoardMember.findMany({
+    where: { isActive: true },
+    orderBy: { order: "asc" },
+  })
+
+  const editorInChief = members.filter((m) => m.role === "Editor-in-Chief")
+  const editors = members.filter((m) => m.role !== "Editor-in-Chief")
 
   return (
-    <div className="container py-12">
-      <h1 className="text-4xl font-bold mb-8">Editorial Board</h1>
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <h1 className="text-3xl font-bold">Editorial Board</h1>
 
-      <div className="prose max-w-none">
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6">Chief Editor</h2>
-          <Card>
-            <CardHeader>
-              <CardTitle>{board.chiefEditor.name}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">{board.chiefEditor.affiliation}</p>
-              <p className="text-sm text-muted-foreground mt-2">
-                {board.chiefEditor.email}
-              </p>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6">Managing Editors</h2>
+      {editorInChief.length > 0 && (
+        <section>
+          <h2 className="text-xl font-semibold mb-4">Editor-in-Chief</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {board.managingEditors.map((editor, i) => (
-              <Card key={i}>
+            {editorInChief.map((member) => (
+              <Card key={member.id}>
                 <CardHeader>
-                  <CardTitle>{editor.name}</CardTitle>
+                  <CardTitle>{member.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{editor.affiliation}</p>
+                  <p className="text-muted-foreground">{member.affiliation}</p>
+                  {member.bio && <p className="mt-2 text-sm">{member.bio}</p>}
                 </CardContent>
               </Card>
             ))}
           </div>
         </section>
+      )}
 
-        <section>
-          <h2 className="text-2xl font-semibold mb-6">Editorial Board Members</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {board.editorialBoard.map((member, i) => (
-              <Card key={i}>
-                <CardContent className="pt-6">
-                  <p className="font-medium">{member.name}</p>
-                  <p className="text-sm text-muted-foreground">{member.affiliation}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </div>
+      <section>
+        <h2 className="text-xl font-semibold mb-4">Editorial Board Members</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {editors.map((member) => (
+            <Card key={member.id}>
+              <CardHeader>
+                <CardTitle className="text-lg">{member.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">{member.affiliation}</p>
+                <p className="text-xs text-muted-foreground mt-1">{member.role}</p>
+                {member.bio && <p className="mt-2 text-sm">{member.bio}</p>}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {members.length === 0 && (
+        <p className="text-muted-foreground text-center py-12">Editorial board information coming soon.</p>
+      )}
     </div>
-  );
+  )
 }
