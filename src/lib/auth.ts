@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import Orcid from "next-auth/providers/orcid";
+
 import { db } from "./db";
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -18,10 +18,43 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    Orcid({
+    {
+      id: "orcid",
+      name: "ORCID",
+      type: "oauth",
+      authorization: {
+        url: "https://orcid.org/oauth/authorize",
+        params: { scope: "/authenticate" },
+      },
+      token: "https://orcid.org/oauth/token",
+      userinfo: {
+        url: "https://pub.orcid.org/v3.0/",
+        request: async ({ tokens }: { tokens: any }) => {
+          const orcid = tokens.id_token || (tokens as any)?.orcid
+          const res = await fetch(`https://pub.orcid.org/v3.0/${orcid}/record`, {
+            headers: { Authorization: `Bearer ${tokens.access_token}` },
+          })
+          const data = await res.json()
+          const name = data?.person?.name
+          return {
+            id: orcid,
+            name: name ? `${name["given-names"]?.value || ""} ${name["family-name"]?.value || ""}`.trim() : null,
+            email: null,
+            image: null,
+          }
+        },
+      },
       clientId: process.env.ORCID_CLIENT_ID,
       clientSecret: process.env.ORCID_CLIENT_SECRET,
-    }),
+      profile(profile) {
+        return {
+          id: profile.id,
+          name: profile.name,
+          email: profile.email,
+          image: profile.image,
+        }
+      },
+    },
     Credentials({
       name: "credentials",
       credentials: {
