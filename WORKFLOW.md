@@ -322,7 +322,7 @@ Our editorial team will review your paper and assign reviewers.
 You will be notified when a decision has been made.
 
 Best regards,
-Research Verse Journal Editorial Team
+Paperas Editorial Team
 ```
 
 ### Review Completed
@@ -339,7 +339,7 @@ Recommendation: [ACCEPT/MINOR_REVISION/MAJOR_REVISION/REJECT]
 Please log in to view the detailed review comments.
 
 Best regards,
-Research Verse Journal Editorial Team
+Paperas Editorial Team
 ```
 
 ### Revision Requested
@@ -360,7 +360,7 @@ Please log in to view the complete review comments.
 Deadline: [Date]
 
 Best regards,
-Research Verse Journal Editorial Team
+Paperas Editorial Team
 ```
 
 ### Paper Published
@@ -380,7 +380,7 @@ View your paper: [Link]
 Thank you for your contribution.
 
 Best regards,
-Research Verse Journal Editorial Team
+Paperas Editorial Team
 ```
 
 ---

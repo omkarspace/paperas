@@ -393,11 +393,11 @@ GET /api/papers/[id]/cite
 
 ```json
 {
-  "apa": "Doe, J. (2026). Sample Research Paper. Research Verse Journal, 1(1), 1-15.",
-  "mla": "Doe, John. \"Sample Research Paper.\" Research Verse Journal, vol. 1, no. 1, 2026, pp. 1-15.",
-  "ieee": "J. Doe, \"Sample Research Paper,\" Research Verse Journal, vol. 1, no. 1, pp. 1-15, Jan. 2026.",
-  "chicago": "Doe, John. \"Sample Research Paper.\" Research Verse Journal 1, no. 1 (2026): 1-15.",
-  "harvard": "Doe, J., 2026. Sample Research Paper. Research Verse Journal, 1(1), pp.1-15."
+  "apa": "Doe, J. (2026). Sample Research Paper. Paperas, 1(1), 1-15.",
+  "mla": "Doe, John. \"Sample Research Paper.\" Paperas, vol. 1, no. 1, 2026, pp. 1-15.",
+  "ieee": "J. Doe, \"Sample Research Paper,\" Paperas, vol. 1, no. 1, pp. 1-15, Jan. 2026.",
+  "chicago": "Doe, John. \"Sample Research Paper.\" Paperas 1, no. 1 (2026): 1-15.",
+  "harvard": "Doe, J., 2026. Sample Research Paper. Paperas, 1(1), pp.1-15."
 }
 ```
 

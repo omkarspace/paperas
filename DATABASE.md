@@ -339,7 +339,7 @@ npx prisma studio
 
 ```env
 # Local PostgreSQL
-DATABASE_URL="postgresql://postgres:password@localhost:5432/research_verse"
+DATABASE_URL="postgresql://postgres:password@localhost:5432/paperas"
 
 # Supabase
 DATABASE_URL="postgresql://postgres:password@project.supabase.co:5432/postgres"

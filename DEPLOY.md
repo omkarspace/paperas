@@ -44,8 +44,8 @@ git --version
 ### Step 1: Clone & Install
 
 ```bash
-git clone https://github.com/your-repo/research-verse.git
-cd research-verse
+git clone https://github.com/your-repo/paperas.git
+cd paperas
 npm install
 ```
 
@@ -55,7 +55,7 @@ Create `.env.local`:
 
 ```bash
 # Database
-DATABASE_URL="postgresql://user:password@localhost:5432/research_verse"
+DATABASE_URL="postgresql://user:password@localhost:5432/paperas"
 
 # Auth.js (required)
 AUTH_SECRET="your-32-char-secret-here"
@@ -90,10 +90,10 @@ openssl rand -base64 32
 
 ```bash
 docker run -d \
-  --name research-verse-db \
+  --name paperas-db \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=research_verse \
+  -e POSTGRES_DB=paperas \
   -p 5432:5432 \
   postgres:16
 ```
@@ -157,7 +157,7 @@ Add in Vercel Dashboard → Settings → Environment Variables:
 | GOOGLE_CLIENT_SECRET | From Google Cloud Console |
 | AWS_ACCESS_KEY_ID | From AWS IAM |
 | AWS_SECRET_ACCESS_KEY | From AWS IAM |
-| AWS_BUCKET_NAME | e.g., `research-verse-papers` |
+| AWS_BUCKET_NAME | e.g., `paperas-papers` |
 | AWS_REGION | e.g., `us-east-1` |
 | NEXT_PUBLIC_APP_URL | Your production URL |
 
@@ -185,7 +185,7 @@ railway up
 
 1. Go to [S3 Console](https://s3.console.aws.amazon.com)
 2. Click "Create bucket"
-3. Name: `research-verse-papers`
+3. Name: `paperas-papers`
 4. Region: Choose closest
 5. Uncheck "Block all public access"
 6. Enable versioning
@@ -214,7 +214,7 @@ Add in bucket → Permissions → CORS
     {
       "Effect": "Allow",
       "Action": ["s3:GetObject", "s3:PutObject"],
-      "Resource": "arn:aws:s3:::research-verse-papers/*"
+      "Resource": "arn:aws:s3:::paperas-papers/*"
     }
   ]
 }
