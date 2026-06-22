@@ -491,7 +491,7 @@ vi.mock("@/lib/auth", () => ({
 describe("Navbar", () => {
   it("renders the journal name", () => {
     render(<Navbar />);
-    expect(screen.getByText("Research Verse")).toBeDefined();
+    expect(screen.getByText("Paperas")).toBeDefined();
   });
 
   it("renders navigation links", () => {
