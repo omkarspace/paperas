@@ -26,6 +26,7 @@ model User {
   bio            String?
   orcid          String?
   googleId       String?   @unique
+  orcidId        String?   @unique
   emailVerified  DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt

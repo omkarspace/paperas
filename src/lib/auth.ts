@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
+import Orcid from "next-auth/providers/orcid";
 import { db } from "./db";
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -16,6 +17,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    Orcid({
+      clientId: process.env.ORCID_CLIENT_ID,
+      clientSecret: process.env.ORCID_CLIENT_SECRET,
     }),
     Credentials({
       name: "credentials",
