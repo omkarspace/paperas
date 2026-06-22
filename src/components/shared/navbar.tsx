@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Menu, X } from "lucide-react";
+import { BookOpen, Menu, X, User } from "lucide-react";
 import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { NotificationBell } from "@/components/shared/notification-bell";
@@ -35,6 +36,7 @@ const aboutLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -107,12 +109,28 @@ export function Navbar() {
         <div className="hidden md:flex ml-auto items-center gap-2">
           <NotificationBell />
           <ThemeToggle />
-          <Link href="/auth/login">
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link href="/auth/register">
-            <Button>Register</Button>
-          </Link>
+          {session ? (
+            <>
+              <Link href="/profile">
+                <Button variant="ghost" size="sm">
+                  <User className="h-4 w-4 mr-1" />
+                  Profile
+                </Button>
+              </Link>
+              <Button variant="ghost" size="sm" onClick={() => signOut()}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/login">
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link href="/auth/register">
+                <Button>Register</Button>
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -137,12 +155,28 @@ export function Navbar() {
             </Link>
           ))}
           <div className="border-t mt-4 pt-4">
-            <Link href="/auth/login" className="block py-3 text-sm font-medium">
-              Login
-            </Link>
-            <Link href="/auth/register" className="block py-3 text-sm font-medium">
-              Register
-            </Link>
+            {session ? (
+              <>
+                <Link href="/profile" className="block py-3 text-sm font-medium" onClick={() => setIsOpen(false)}>
+                  Profile
+                </Link>
+                <button
+                  className="block py-3 text-sm font-medium text-left w-full"
+                  onClick={() => { setIsOpen(false); signOut(); }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/auth/login" className="block py-3 text-sm font-medium" onClick={() => setIsOpen(false)}>
+                  Login
+                </Link>
+                <Link href="/auth/register" className="block py-3 text-sm font-medium" onClick={() => setIsOpen(false)}>
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       )}

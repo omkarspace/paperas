@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { SessionProvider } from "next-auth/react";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { PageTransition } from "@/components/shared/page-transition";
@@ -26,11 +27,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <SessionProvider>
           <Navbar />
           <main className="flex-1">
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />
+          </SessionProvider>
         </ThemeProvider>
         <script
           dangerouslySetInnerHTML={{
