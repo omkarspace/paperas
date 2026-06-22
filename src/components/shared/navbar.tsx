@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { BookOpen, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -102,7 +103,8 @@ export function Navbar() {
           </NavigationMenu>
         </nav>
 
-        <div className="hidden md:flex ml-auto">
+        <div className="hidden md:flex ml-auto items-center gap-2">
+          <ThemeToggle />
           <Link href="/auth/login">
             <Button variant="ghost">Login</Button>
           </Link>
