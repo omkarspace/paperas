@@ -277,10 +277,10 @@ export default async function seed() {
   const adminPassword = await hash('admin123', 12)
   
   await prisma.user.upsert({
-    where: { email: 'admin@researchverse.com' },
+    where: { email: 'admin@paperas.dev' },
     update: {},
     create: {
-      email: 'admin@researchverse.com',
+      email: 'admin@paperas.dev',
       name: 'Admin',
       role: 'ADMIN',
       password: adminPassword,

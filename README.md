@@ -84,12 +84,12 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 
 | Document | Description |
 |----------|-------------|
-| [SPEC.md](./SPEC.md) | Technical specification, routes, models |
-| [DESIGN.md](./DESIGN.md) | Design system, UI/UX guidelines |
-| [API.md](./API.md) | API endpoints documentation |
-| [DATABASE.md](./DATABASE.md) | Database schema |
-| [DEPLOY.md](./DEPLOY.md) | Deployment guide |
-| [QUICKSTART.md](./QUICKSTART.md) | New developer quick start |
+| [SPEC.md](./docs/SPEC.md) | Technical specification, routes, models |
+| [DESIGN.md](./docs/DESIGN.md) | Design system, UI/UX guidelines |
+| [API.md](./docs/API.md) | API endpoints documentation |
+| [DATABASE.md](./docs/DATABASE.md) | Database schema |
+| [DEPLOY.md](./docs/DEPLOY.md) | Deployment guide |
+| [QUICKSTART.md](./docs/QUICKSTART.md) | New developer quick start |
 
 ## License
 
