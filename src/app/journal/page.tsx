@@ -18,11 +18,11 @@ export default async function JournalPage() {
 
   return (
     <div className="container py-12">
-      <h1 className="text-4xl font-bold mb-8">Journal Archives</h1>
+      <h1 className="font-serif font-bold text-3xl mb-8">Journal Archives</h1>
 
       {issues.length > 0 ? (
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6">Issues</h2>
+          <h2 className="font-serif font-semibold text-xl mb-6">Issues</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {issues.map((issue) => (
               <Link key={issue.id} href={`/journal/${issue.volume}/${issue.issue}`}>
@@ -31,7 +31,7 @@ export default async function JournalPage() {
                     <CardTitle>Volume {issue.volume}, Issue {issue.issue}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="font-mono text-sm text-muted-foreground">
                       Published: {new Date(issue.publicationDate).toLocaleDateString()}
                     </p>
                   </CardContent>
@@ -43,7 +43,7 @@ export default async function JournalPage() {
       ) : null}
 
       <div>
-        <h2 className="text-2xl font-semibold mb-6">All Publications</h2>
+        <h2 className="font-serif font-semibold text-xl mb-6">All Publications</h2>
         {papers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {papers.map((paper) => (

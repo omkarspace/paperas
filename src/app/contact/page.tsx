@@ -8,12 +8,12 @@ import { Mail, Phone, MapPin, Clock } from "lucide-react";
 export default function ContactPage() {
   return (
     <div className="container py-12">
-      <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
+      <h1 className="font-serif font-bold text-3xl mb-8">Contact Us</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div>
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
+            <h2 className="font-serif font-semibold mb-4">Get in Touch</h2>
             <p className="text-muted-foreground">
               Have questions about submissions, the journal, or general
               inquiries? We&apos;re here to help. Reach out through any of
@@ -29,7 +29,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium">Email</p>
                     <p className="text-sm text-muted-foreground">
-                      editor@researchverse.in
+                      editor@paperas.dev
                     </p>
                   </div>
                 </div>
@@ -92,7 +92,7 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" placeholder="Your name" required />
+                    <Input id="name" placeholder="Your name" required className="h-11" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -101,6 +101,7 @@ export default function ContactPage() {
                       type="email"
                       placeholder="you@example.com"
                       required
+                      className="h-11"
                     />
                   </div>
                 </div>
@@ -110,6 +111,7 @@ export default function ContactPage() {
                     id="subject"
                     placeholder="Inquiry about..."
                     required
+                    className="h-11"
                   />
                 </div>
                 <div className="space-y-2">
