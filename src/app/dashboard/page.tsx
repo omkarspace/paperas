@@ -30,7 +30,7 @@ export default async function DashboardPage() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="font-serif font-bold text-3xl">{stats.total}</div>
           </CardContent>
         </Card>
         <Card>
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.underReview}</div>
+            <div className="font-serif font-bold text-3xl">{stats.underReview}</div>
           </CardContent>
         </Card>
         <Card>
@@ -48,7 +48,7 @@ export default async function DashboardPage() {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.published}</div>
+            <div className="font-serif font-bold text-3xl">{stats.published}</div>
           </CardContent>
         </Card>
         <Card>
@@ -57,7 +57,7 @@ export default async function DashboardPage() {
             <XCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.draft}</div>
+            <div className="font-serif font-bold text-3xl">{stats.draft}</div>
           </CardContent>
         </Card>
       </div>
@@ -75,8 +75,8 @@ export default async function DashboardPage() {
                   className="flex items-center justify-between border-b pb-4 last:border-0"
                 >
                   <div>
-                    <p className="font-medium">{paper.title}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="font-serif font-medium">{paper.title}</p>
+                    <p className="font-mono text-xs text-muted-foreground">
                       {paper.paperId} - {paper.status}
                     </p>
                   </div>

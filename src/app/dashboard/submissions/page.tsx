@@ -31,7 +31,7 @@ export default async function SubmissionsPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">My Submissions</h2>
+        <h2 className="font-serif font-bold text-2xl">My Submissions</h2>
         <Link href="/dashboard/submit">
           <Button>New Submission</Button>
         </Link>
@@ -43,12 +43,12 @@ export default async function SubmissionsPage() {
             <Card key={paper.id}>
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg">{paper.title}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <CardTitle className="font-serif font-medium text-lg">{paper.title}</CardTitle>
+                  <p className="font-mono text-xs text-muted-foreground mt-1">
                     {paper.paperId} • {paper.category?.name || "Uncategorized"}
                   </p>
                 </div>
-                <Badge className={statusColors[paper.status]}>{paper.status.replace("_", " ")}</Badge>
+                <Badge className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${statusColors[paper.status]}`}>{paper.status.replace("_", " ")}</Badge>
               </CardHeader>
               <CardContent className="flex justify-between items-center">
                 <p className="text-sm text-muted-foreground line-clamp-2 max-w-xl">

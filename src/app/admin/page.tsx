@@ -25,7 +25,7 @@ export default async function AdminDashboardPage() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{papers}</div>
+            <div className="font-serif font-bold text-3xl">{papers}</div>
           </CardContent>
         </Card>
         <Card>
@@ -34,7 +34,7 @@ export default async function AdminDashboardPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{users}</div>
+            <div className="font-serif font-bold text-3xl">{users}</div>
           </CardContent>
         </Card>
         <Card>
@@ -43,7 +43,7 @@ export default async function AdminDashboardPage() {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{issues}</div>
+            <div className="font-serif font-bold text-3xl">{issues}</div>
           </CardContent>
         </Card>
         <Card>
@@ -52,20 +52,20 @@ export default async function AdminDashboardPage() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12%</div>
+            <div className="font-serif font-bold text-3xl">+12%</div>
           </CardContent>
         </Card>
       </div>
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Papers by Status</CardTitle>
+          <CardTitle className="font-serif font-bold text-2xl">Papers by Status</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             {papersByStatus.map((item) => (
               <div key={item.status} className="flex justify-between">
-                <span className="text-muted-foreground">{item.status}</span>
+                <span className="rounded-full px-2.5 py-0.5 text-xs font-medium border text-muted-foreground">{item.status}</span>
                 <span className="font-medium">{item._count}</span>
               </div>
             ))}
