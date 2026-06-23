@@ -43,7 +43,7 @@ export function Navbar() {
       <div className="container flex h-16 items-center">
         <Link href="/" className="flex items-center space-x-2">
           <BookOpen className="h-6 w-6" />
-          <span className="text-xl font-bold">Paperas</span>
+          <span className="text-xl font-serif font-semibold">Paperas</span>
         </Link>
 
         <nav className="hidden md:flex ml-8">
@@ -52,9 +52,9 @@ export function Navbar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "px-4 py-2 text-sm font-medium transition-colors hover:text-primary",
+                "px-4 py-2 text-xs font-medium tracking-wide uppercase transition-colors hover:text-primary",
                 pathname === item.href
-                  ? "text-primary"
+                  ? "border-b-2 border-primary pb-1 -mb-1"
                   : "text-muted-foreground"
               )}
             >
@@ -64,7 +64,7 @@ export function Navbar() {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="px-4 py-2 text-sm font-medium text-muted-foreground">
+                <NavigationMenuTrigger className="px-4 py-2 text-xs font-medium tracking-wide uppercase text-muted-foreground">
                   About
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -143,12 +143,17 @@ export function Navbar() {
       </div>
 
       {isOpen && (
-        <nav className="md:hidden border-t p-4">
+        <nav className="md:hidden border-t p-4 animate-in slide-in-from-top-2 duration-200">
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="block py-3 text-sm font-medium"
+              className={cn(
+                "block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors",
+                pathname === item.href
+                  ? "text-primary font-semibold"
+                  : "text-muted-foreground hover:text-primary"
+              )}
               onClick={() => setIsOpen(false)}
             >
               {item.name}
@@ -157,11 +162,15 @@ export function Navbar() {
           <div className="border-t mt-4 pt-4">
             {session ? (
               <>
-                <Link href="/profile" className="block py-3 text-sm font-medium" onClick={() => setIsOpen(false)}>
+                <Link
+                  href="/profile"
+                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors hover:text-primary"
+                  onClick={() => setIsOpen(false)}
+                >
                   Profile
                 </Link>
                 <button
-                  className="block py-3 text-sm font-medium text-left w-full"
+                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium text-left w-full transition-colors hover:text-primary"
                   onClick={() => { setIsOpen(false); signOut(); }}
                 >
                   Logout
@@ -169,10 +178,18 @@ export function Navbar() {
               </>
             ) : (
               <>
-                <Link href="/auth/login" className="block py-3 text-sm font-medium" onClick={() => setIsOpen(false)}>
+                <Link
+                  href="/auth/login"
+                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors hover:text-primary"
+                  onClick={() => setIsOpen(false)}
+                >
                   Login
                 </Link>
-                <Link href="/auth/register" className="block py-3 text-sm font-medium" onClick={() => setIsOpen(false)}>
+                <Link
+                  href="/auth/register"
+                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors hover:text-primary"
+                  onClick={() => setIsOpen(false)}
+                >
                   Register
                 </Link>
               </>
