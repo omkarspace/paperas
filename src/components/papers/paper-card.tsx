@@ -11,7 +11,7 @@ export function PaperCard({ paper }: PaperCardProps) {
 
   return (
     <Link href={'/research/' + paper.paperId}>
-      <article className="group h-full p-5 rounded-2xl border border-border bg-card hover:shadow-md transition-all duration-200">
+      <article className="group h-full p-5 rounded-2xl border border-border bg-card hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
         <div className="flex items-center gap-2 mb-3">
           {paper.category && (
             <Badge variant="secondary" className="rounded-full px-2.5 py-0.5 text-xs font-medium">
