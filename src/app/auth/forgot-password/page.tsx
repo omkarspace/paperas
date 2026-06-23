@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
-              If an account exists for {email}, we've sent a password reset link.
+              If an account exists for {email}, we&apos;ve sent a password reset link.
             </p>
           </CardContent>
         </Card>

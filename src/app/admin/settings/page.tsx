@@ -61,7 +61,7 @@ export default function AdminSettingsPage() {
               <div className="space-y-2">
                 <Label htmlFor="doiPrefix">DOI Prefix</Label>
                 <Input id="doiPrefix" name="doiPrefix" defaultValue={process.env.NEXT_PUBLIC_DOI_PREFIX || "xxxx"} placeholder="e.g., 1234" />
-                <p className="text-xs text-muted-foreground">Your Crossref DOI prefix (without '10.')</p>
+                <p className="text-xs text-muted-foreground">Your Crossref DOI prefix (without &apos;10.&apos;)</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Editor Email</Label>
