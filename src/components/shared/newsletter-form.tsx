@@ -48,7 +48,7 @@ export function NewsletterForm() {
           required
           autoComplete="email"
           spellCheck={false}
-          className="flex h-10 flex-1 rounded-full border border-border bg-background px-4 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-colors"
+          className="flex h-12 flex-1 rounded-full border border-border bg-background px-4 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-colors"
         />
         <Button type="submit" disabled={status === "loading"} size="sm" className="rounded-full px-5">
           {status === "loading" ? "Loading…" : "Subscribe"}

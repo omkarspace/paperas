@@ -22,7 +22,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-medium tracking-wide uppercase text-foreground/60 mb-4">Quick Links</h3>
+            <h3 className="text-sm font-medium tracking-wide uppercase text-muted-foreground mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -53,7 +53,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-medium tracking-wide uppercase text-foreground/60 mb-4">Contact</h3>
+            <h3 className="text-sm font-medium tracking-wide uppercase text-muted-foreground mb-4">Contact</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-4 w-4" />

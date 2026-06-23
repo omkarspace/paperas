@@ -76,7 +76,7 @@ export function Navbar() {
         </div>
 
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >

@@ -10,12 +10,16 @@ import { db } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const papers = await db.paper.findMany({
-    where: { status: "PUBLISHED" },
-    take: 6,
-    orderBy: { publicationDate: "desc" },
-    include: { author: true, category: true },
-  });
+  const [papers, paperCount, issueCount] = await Promise.all([
+    db.paper.findMany({
+      where: { status: "PUBLISHED" },
+      take: 6,
+      orderBy: { publicationDate: "desc" },
+      include: { author: true, category: true },
+    }),
+    db.paper.count({ where: { status: "PUBLISHED" } }),
+    db.journalIssue.count({ where: { isPublished: true } }),
+  ]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -26,14 +30,14 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: FileText, label: "Published Papers", value: "150+", sub: "Research articles" },
-              { icon: BookOpen, label: "Active Issues", value: "12", sub: "Volumes published" },
+              { icon: FileText, label: "Published Papers", value: paperCount, sub: "Research articles" },
+              { icon: BookOpen, label: "Active Issues", value: issueCount, sub: "Volumes published" },
               { icon: Users, label: "Reviewers", value: "45+", sub: "Expert reviewers" },
               { icon: Search, label: "Citations", value: "2000+", sub: "Total citations" },
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col items-center text-center p-6 rounded-[24px] border border-border bg-card"
+                className="flex flex-col items-center text-center p-6 rounded-2xl border border-border bg-card"
               >
                 <stat.icon className="h-5 w-5 text-primary mb-3" aria-hidden="true" />
                 <div className="font-serif font-bold text-3xl md:text-4xl mb-1">{stat.value}</div>
@@ -64,7 +68,7 @@ export default async function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 rounded-[24px] border border-border bg-card">
+            <div className="text-center py-16 rounded-2xl border border-border bg-card">
               <BookOpen className="h-10 w-10 mx-auto mb-3 text-muted-foreground" aria-hidden="true" />
               <p className="text-muted-foreground text-sm">No publications yet. Be the first to submit!</p>
             </div>
@@ -75,7 +79,7 @@ export default async function HomePage() {
       {/* Newsletter Section */}
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="max-w-xl mx-auto text-center p-8 md:p-12 rounded-[24px] border border-border bg-card">
+          <div className="max-w-xl mx-auto text-center p-8 md:p-12 rounded-2xl border border-border bg-card">
             <h2 className="font-serif font-semibold text-xl mb-3">Stay Updated</h2>
             <p className="text-sm text-muted-foreground mb-6">
               Subscribe to receive the latest updates on new publications and journal announcements.

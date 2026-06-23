@@ -3,7 +3,7 @@ export default function AboutPage() {
     <div className="container py-12">
       <h1 className="font-serif font-bold text-3xl mb-8">About Us</h1>
 
-      <div className="prose prose-slate dark:prose-invert max-w-content">
+      <div className="max-w-content">
         <section className="mb-12">
           <h2 className="font-serif font-semibold text-2xl mb-4">About the Journal</h2>
           <p className="text-muted-foreground">
