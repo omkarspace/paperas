@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Aim & Scope",
+  description: "Learn about the aims, scope, and article types accepted by Paperas academic journal.",
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/about/aim-scope` },
+};
+
 export default function AimScopePage() {
   return (
     <div className="container py-12">

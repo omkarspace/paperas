@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Publication Ethics",
+  description: "Ethical guidelines and publication standards for authors, reviewers, and editors.",
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/about/publication-ethics` },
+};
+
 export default function PublicationEthicsPage() {
   return (
     <div className="container py-12">

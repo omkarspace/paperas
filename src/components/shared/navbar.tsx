@@ -43,6 +43,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
+              aria-current={pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href)) ? "page" : undefined}
               className={cn(
                 "px-3 py-1.5 text-xs font-medium tracking-wide uppercase rounded-full transition-colors",
                 pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
@@ -96,6 +97,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
+              aria-current={pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href)) ? "page" : undefined}
               className={cn(
                 "block px-4 py-2.5 text-sm font-medium rounded-xl transition-colors",
                 pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))

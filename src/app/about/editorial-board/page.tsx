@@ -1,5 +1,12 @@
+import type { Metadata } from "next"
 import { db } from "@/lib/db"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+export const metadata: Metadata = {
+  title: "Editorial Board",
+  description: "Meet the editorial board members of Paperas academic journal.",
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/about/editorial-board` },
+}
 
 export const dynamic = "force-dynamic"
 

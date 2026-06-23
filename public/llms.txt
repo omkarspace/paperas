@@ -1,0 +1,22 @@
+# Paperas - Peer-Reviewed Academic Journal
+
+> Paperas is an open access academic publishing platform by Research Verse Journal And Publication House Of India. We publish peer-reviewed research papers, scholarly articles, and academic publications across various disciplines.
+
+## About
+Paperas provides a platform for dissemination of original research findings across multiple disciplines, fostering intellectual discourse and promoting evidence-based research.
+
+## Key Pages
+- Home: https://paperas.dev
+- Research Archive: https://paperas.dev/research
+- Journal Archives: https://paperas.dev/journal
+- About: https://paperas.dev/about/aim-scope
+- Author Guidelines: https://paperas.dev/about/author-guidelines
+- Contact: https://paperas.dev/contact
+
+## API
+- Search papers: https://paperas.dev/search/advanced?q={query}
+
+## Policies
+- Open Access: All published papers are freely accessible
+- Peer Review: Double-blind peer review process
+- Publication Ethics: https://paperas.dev/about/publication-ethics

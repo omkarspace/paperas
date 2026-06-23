@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { Suspense } from "react";
 import { AdvancedSearchClient } from "./client";
+
+export const metadata: Metadata = {
+  title: "Advanced Search",
+  description: "Search and filter research papers by title, author, keywords, category, and date.",
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/search/advanced` },
+};
 
 export const dynamic = "force-dynamic";
 

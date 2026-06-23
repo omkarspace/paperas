@@ -1,10 +1,48 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { PaperViewTracker } from "@/components/papers/paper-view-tracker";
 import { DownloadButton } from "@/components/papers/download-button";
 import { CitationDialog } from "@/components/papers/citation-dialog";
+import { JsonLd } from "@/components/shared/json-ld";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ paperId: string }>;
+}): Promise<Metadata> {
+  const { paperId } = await params;
+  const paper = await db.paper.findUnique({
+    where: { paperId },
+    include: { author: true },
+  });
+
+  if (!paper) return { title: "Paper Not Found" };
+
+  return {
+    title: paper.title,
+    description: paper.abstract?.slice(0, 160),
+    keywords: paper.keywords?.split(",").map((k: string) => k.trim()),
+    openGraph: {
+      title: paper.title,
+      description: paper.abstract?.slice(0, 160),
+      type: "article",
+      authors: paper.author?.name ? [paper.author.name] : [],
+      publishedTime: paper.publicationDate?.toISOString(),
+      modifiedTime: paper.updatedAt.toISOString(),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: paper.title,
+      description: paper.abstract?.slice(0, 160),
+    },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://paperas.dev"}/research/${paper.paperId}`,
+    },
+  };
+}
 
 export default async function PaperDetailPage({
   params,
@@ -27,7 +65,7 @@ export default async function PaperDetailPage({
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <article itemScope itemType="https://schema.org/ScholarlyArticle" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           {paper.category && (
@@ -148,6 +186,30 @@ export default async function PaperDetailPage({
         </div>
       )}
       <PaperViewTracker paperId={paper.paperId} />
-    </div>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ScholarlyArticle",
+          headline: paper.title,
+          abstract: paper.abstract,
+          keywords: paper.keywords?.split(",").map((k: string) => k.trim()).join(", "),
+          author: paper.author ? [{ "@type": "Person", name: paper.author.name }] : [],
+          datePublished: paper.publicationDate?.toISOString(),
+          dateModified: paper.updatedAt?.toISOString(),
+          publisher: {
+            "@type": "Organization",
+            name: "Research Verse Journal And Publication House Of India",
+          },
+          isPartOf: {
+            "@type": "Periodical",
+            name: "Paperas",
+          },
+          url: `${process.env.NEXT_PUBLIC_APP_URL || "https://paperas.dev"}/research/${paper.paperId}`,
+          identifier: paper.doi || paper.paperId,
+          inLanguage: "en",
+          license: "https://creativecommons.org/licenses/by/4.0/",
+        }}
+      />
+    </article>
   );
 }

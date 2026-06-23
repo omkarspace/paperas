@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { NewsletterForm } from "@/components/shared/newsletter-form";
 import { PaperCard } from "@/components/papers/paper-card";
 import { CTASection } from "@/components/ui/hero-dithering-card";
+import { JsonLd } from "@/components/shared/json-ld";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -83,6 +84,38 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Paperas",
+          url: process.env.NEXT_PUBLIC_APP_URL || "https://paperas.dev",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${process.env.NEXT_PUBLIC_APP_URL || "https://paperas.dev"}/search/advanced?q={search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
+          },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Periodical",
+          name: "Paperas",
+          alternateName: "Research Verse Journal And Publication House Of India",
+          url: process.env.NEXT_PUBLIC_APP_URL || "https://paperas.dev",
+          description: "A peer-reviewed academic journal dedicated to publishing quality research across various disciplines.",
+          publisher: {
+            "@type": "Organization",
+            name: "Research Verse Journal And Publication House Of India",
+          },
+          isInStock: true,
+          isOpenAccess: true,
+        }}
+      />
     </div>
   );
 }

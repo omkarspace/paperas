@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Author Guidelines",
+  description: "Step-by-step guide for preparing and submitting your research paper.",
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/author-guidelines` },
+};
+
 export default function AuthorGuidelinesPage() {
   return (
     <div className="container py-12">

@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export const metadata: Metadata = {
+  title: "Journal Archives",
+  description: "Browse all journal issues and volumes of Paperas academic journal.",
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/journal` },
+};
 
 export const dynamic = "force-dynamic";
 

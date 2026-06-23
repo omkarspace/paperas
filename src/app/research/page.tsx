@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PaperCard } from "@/components/papers/paper-card";
+
+export const metadata: Metadata = {
+  title: "Research Archive",
+  description: "Browse peer-reviewed research papers, scholarly articles, and academic publications across various disciplines.",
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/research` },
+};
 
 export const dynamic = "force-dynamic";
 
