@@ -1,86 +1,123 @@
-import Link from "next/link";
 import { db } from "@/lib/db";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { PaperCard } from "@/components/papers/paper-card";
 
 export const dynamic = "force-dynamic";
 
 export default async function ResearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
 }) {
-  const { q } = await searchParams;
+  const { q, page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
+  const pageSize = 12;
 
-  const papers = await db.paper.findMany({
-    where: {
-      status: "PUBLISHED",
-      ...(q && {
-        OR: [
-          { title: { contains: q } },
-          { abstract: { contains: q } },
-        ],
-      }),
-    },
-    orderBy: { publicationDate: "desc" },
-    include: { author: true, category: true },
-  });
+  const where = {
+    status: "PUBLISHED" as const,
+    ...(q && {
+      OR: [
+        { title: { contains: q } },
+        { abstract: { contains: q } },
+      ],
+    }),
+  };
+
+  const [papers, total] = await Promise.all([
+    db.paper.findMany({
+      where,
+      orderBy: { publicationDate: "desc" },
+      include: { author: true, category: true },
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+    }),
+    db.paper.count({ where }),
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <div className="container py-12">
-      <h1 className="text-4xl font-bold mb-8">Research Archive</h1>
+    <div className="container py-12 max-w-5xl">
+      <h1 className="font-serif font-bold text-3xl mb-8">Research Archive</h1>
 
-      <form className="mb-8">
-        <Input
-          name="q"
-          defaultValue={q}
-          placeholder="Search papers by title, abstract, or keywords..."
-          className="max-w-md"
-        />
+      <form className="mb-10">
+        <div className="flex items-center gap-3">
+          <Input
+            name="q"
+            defaultValue={q}
+            placeholder="Search by title or abstract..."
+            className="max-w-sm border rounded-md"
+          />
+          <Button type="submit" variant="secondary" className="rounded-md">
+            Search
+          </Button>
+        </div>
       </form>
 
+      <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-6">
+        {total} {total === 1 ? "paper" : "papers"} found
+      </p>
+
       {papers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {papers.map((paper) => (
-            <Card key={paper.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-center gap-2 mb-2">
-                  {paper.category && (
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                      {paper.category.name}
-                    </span>
-                  )}
-                </div>
-                <CardTitle className="line-clamp-2 text-lg">
-                  <Link href={`/research/${paper.paperId}`}>{paper.title}</Link>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
-                  {paper.abstract}
-                </p>
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {paper.keywords.split(",").slice(0, 3).map((kw: string) => (
-                    <span
-                      key={kw.trim()}
-                      className="text-xs bg-muted px-2 py-1 rounded"
-                    >
-                      {kw.trim()}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{paper.author?.name}</span>
-                  <span className="text-muted-foreground">{paper.paperId}</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            {papers.map((paper) => (
+              <PaperCard key={paper.id} paper={paper} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <nav className="flex items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-md"
+                disabled={page <= 1}
+              >
+                <a href={`?q=${q || ""}&page=${page - 1}`}>Previous</a>
+              </Button>
+
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                let pageNum: number;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (page <= 3) {
+                  pageNum = i + 1;
+                } else if (page >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = page - 2 + i;
+                }
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={pageNum === page ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-md"
+                  >
+                    <a href={`?q=${q || ""}&page=${pageNum}`}>{pageNum}</a>
+                  </Button>
+                );
+              })}
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-md"
+                disabled={page >= totalPages}
+              >
+                <a href={`?q=${q || ""}&page=${page + 1}`}>Next</a>
+              </Button>
+            </nav>
+          )}
+        </>
       ) : (
-        <p className="text-muted-foreground">
-          {q ? `No papers found for "${q}"` : "No papers available yet."}
-        </p>
+        <div className="text-center py-16">
+          <p className="font-serif text-lg text-muted-foreground">
+            {q ? `No papers found for "${q}"` : "No papers available yet."}
+          </p>
+        </div>
       )}
     </div>
   );
