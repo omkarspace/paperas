@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { BookOpen } from "lucide-react"
+import { BookOpen, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { PaperCard } from "@/components/papers/paper-card"
 import { db } from "@/lib/db"
@@ -20,6 +20,7 @@ export async function PublicationsSection() {
           <Link href="/journal">
             <Button variant="ghost" size="sm" className="rounded-full gap-2">
               View All
+              <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>

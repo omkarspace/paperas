@@ -28,9 +28,9 @@ export function HowItWorksSection() {
         <h2 className="font-serif font-semibold text-2xl text-center mb-12">
           How It Works
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div className="flex flex-col md:flex-row items-start justify-center gap-8 md:gap-0">
           {steps.map((step, index) => (
-            <div key={step.number} className="flex flex-col items-center text-center">
+            <div key={step.number} className="flex flex-col items-center text-center flex-1 relative">
               <div className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mb-4">
                 {step.number}
               </div>
@@ -38,7 +38,7 @@ export function HowItWorksSection() {
               <h3 className="font-serif font-semibold text-lg mb-2">{step.title}</h3>
               <p className="text-sm text-muted-foreground">{step.description}</p>
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute border-dashed border-t border-border" />
+                <div className="hidden md:block absolute top-4 left-[calc(50%+24px)] right-[calc(-50%+24px)] border-dashed border-t border-border" />
               )}
             </div>
           ))}
