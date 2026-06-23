@@ -50,9 +50,6 @@ Thumbs.db
 # Logs
 logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Cache
 .cache/
@@ -68,18 +65,8 @@ temp/
 *.dump
 *.bak
 
-# Environment variables backup
-.env.backup
-.env.production.backup
-
-# Vercel
-.vercel
-
-# TypeScript incremental compilation
-tsconfig.tsbuildinfo
-
 # ESLint
 .eslintcache
 
-
+# Skills
 /skills/
