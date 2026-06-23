@@ -18,13 +18,6 @@ const navLinks = [
   { name: "Contact", href: "/contact" },
 ]
 
-const aboutLinks = [
-  { name: "Aim & Scope", href: "/about/aim-scope" },
-  { name: "Editorial Board", href: "/about/editorial-board" },
-  { name: "Author Guidelines", href: "/about/author-guidelines" },
-  { name: "Publication Ethics", href: "/about/publication-ethics" },
-]
-
 export function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
