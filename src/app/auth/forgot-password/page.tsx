@@ -32,9 +32,9 @@ export default function ForgotPasswordPage() {
   if (sent) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md border rounded-md shadow-none">
           <CardHeader>
-            <CardTitle>Check your email</CardTitle>
+            <CardTitle className="font-serif font-bold text-2xl">Check your email</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
@@ -48,21 +48,22 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md border rounded-md shadow-none">
         <CardHeader>
-          <CardTitle>Forgot password</CardTitle>
+          <CardTitle className="font-serif font-bold text-2xl">Forgot password</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               type="email"
               placeholder="Email"
+              className="h-11 rounded-md"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full">Send reset link</Button>
+            <Button type="submit" className="w-full h-11 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm">Send reset link</Button>
             <p className="text-sm text-center text-muted-foreground">
               <Link href="/auth/login" className="hover:underline">Back to login</Link>
             </p>

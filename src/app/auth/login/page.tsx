@@ -40,9 +40,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border rounded-md shadow-none">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
+          <CardTitle className="font-serif font-bold text-2xl">Login</CardTitle>
           <CardDescription>
             Enter your email and password to access your account
           </CardDescription>
@@ -61,6 +61,7 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 placeholder="you@example.com"
+                className="h-11 rounded-md"
                 required
               />
             </div>
@@ -70,6 +71,7 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 type="password"
+                className="h-11 rounded-md"
                 required
               />
             </div>
@@ -78,7 +80,7 @@ export default function LoginPage() {
                 Forgot password?
               </Link>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full h-11 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm" disabled={loading}>
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
@@ -95,7 +97,7 @@ export default function LoginPage() {
           <div className="space-y-3">
             <Button
               variant="outline"
-              className="w-full"
+              className="w-full h-11 rounded-md border"
               onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -120,7 +122,7 @@ export default function LoginPage() {
             </Button>
             <Button
               variant="outline"
-              className="w-full"
+              className="w-full h-11 rounded-md border"
               onClick={() => signIn("orcid", { callbackUrl: "/dashboard" })}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="#A6CE39">

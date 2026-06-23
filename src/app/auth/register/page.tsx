@@ -48,9 +48,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border rounded-md shadow-none">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+          <CardTitle className="font-serif font-bold text-2xl">Create Account</CardTitle>
           <CardDescription>
             Register to submit papers and track your submissions
           </CardDescription>
@@ -69,6 +69,7 @@ export default function RegisterPage() {
                 name="name"
                 type="text"
                 placeholder="Dr. John Doe"
+                className="h-11 rounded-md"
                 required
               />
             </div>
@@ -79,6 +80,7 @@ export default function RegisterPage() {
                 name="email"
                 type="email"
                 placeholder="you@example.com"
+                className="h-11 rounded-md"
                 required
               />
             </div>
@@ -89,6 +91,7 @@ export default function RegisterPage() {
                 name="institution"
                 type="text"
                 placeholder="University or Organization"
+                className="h-11 rounded-md"
               />
             </div>
             <div className="space-y-2">
@@ -98,10 +101,11 @@ export default function RegisterPage() {
                 name="password"
                 type="password"
                 minLength={8}
+                className="h-11 rounded-md"
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full h-11 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm" disabled={loading}>
               {loading ? "Creating account..." : "Create Account"}
             </Button>
           </form>
