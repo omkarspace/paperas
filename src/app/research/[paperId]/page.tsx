@@ -1,6 +1,4 @@
 import { db } from "@/lib/db";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { notFound } from "next/navigation";
 import { PaperViewTracker } from "@/components/papers/paper-view-tracker";
 import { DownloadButton } from "@/components/papers/download-button";
@@ -29,63 +27,116 @@ export default async function PaperDetailPage({
   }
 
   return (
-    <div className="container py-12 max-w-4xl">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           {paper.category && (
-            <Badge variant="secondary">{paper.category.name}</Badge>
+            <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium border">
+              {paper.category.name}
+            </span>
           )}
-          <span className="text-sm text-muted-foreground">{paper.paperId}</span>
+          <span className="font-mono text-xs text-muted-foreground">
+            {paper.paperId}
+          </span>
         </div>
-        <h1 className="text-4xl font-bold mb-4">{paper.title}</h1>
-        <p className="text-muted-foreground">
-          {paper.author?.name} • {paper.author?.institution}
+        <h1 className="font-serif font-bold text-3xl sm:text-4xl mb-4">
+          {paper.title}
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          {paper.author?.name && (
+            <span className="font-medium text-foreground">
+              {paper.author.name}
+            </span>
+          )}
+          {paper.author?.name && paper.author?.institution && (
+            <span className="text-muted-foreground"> &middot; </span>
+          )}
+          {paper.author?.institution && (
+            <span>{paper.author.institution}</span>
+          )}
         </p>
         {paper.coAuthors.length > 0 && (
-          <p className="text-sm text-muted-foreground">
-            with {paper.coAuthors.sort((a, b) => a.order - b.order).map(ca => ca.name).join(", ")}
-          </p>
-        )}
-        {paper.publicationDate && (
-          <p className="text-sm text-muted-foreground mt-2">
-            Published: {new Date(paper.publicationDate).toLocaleDateString()}
+          <p className="text-sm text-muted-foreground mt-1">
+            with{" "}
+            {paper.coAuthors
+              .sort((a, b) => a.order - b.order)
+              .map((ca) => ca.name)
+              .join(", ")}
           </p>
         )}
       </div>
 
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Abstract</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="leading-relaxed">{paper.abstract}</p>
-        </CardContent>
-      </Card>
+      <div className="border-l-2 border-muted pl-6 my-8">
+        <h2 className="font-serif text-lg font-semibold mb-3">Abstract</h2>
+        <p className="text-lg leading-relaxed text-foreground/80">
+          {paper.abstract}
+        </p>
+      </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-3">Keywords</h2>
+        <h2 className="font-serif text-lg font-semibold mb-3">Keywords</h2>
         <div className="flex flex-wrap gap-2">
           {paper.keywords.split(",").map((kw: string) => (
-            <Badge key={kw.trim()} variant="outline">
+            <span
+              key={kw.trim()}
+              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium border"
+            >
               {kw.trim()}
-            </Badge>
+            </span>
           ))}
         </div>
       </div>
 
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 text-sm">
+        {paper.publicationDate && (
+          <div>
+            <span className="text-muted-foreground block">Published</span>
+            <span className="font-medium text-foreground">
+              {new Date(paper.publicationDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </div>
+        )}
+        {paper.volume && (
+          <div>
+            <span className="text-muted-foreground block">Volume</span>
+            <span className="font-medium text-foreground">{paper.volume}</span>
+          </div>
+        )}
+        {paper.issue && (
+          <div>
+            <span className="text-muted-foreground block">Issue</span>
+            <span className="font-medium text-foreground">{paper.issue}</span>
+          </div>
+        )}
+        {paper.doi && (
+          <div>
+            <span className="text-muted-foreground block">DOI</span>
+            <span className="font-mono text-xs text-muted-foreground">
+              {paper.doi}
+            </span>
+          </div>
+        )}
+      </div>
+
       {paper.pdfUrl && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Full Paper</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
+        <div className="border border-border rounded-md p-6 mb-8">
+          <h2 className="font-serif text-lg font-semibold mb-4">
+            Full Paper
+          </h2>
+          <div className="flex flex-wrap gap-3">
             <DownloadButton pdfUrl={paper.pdfUrl} paperId={paper.paperId} />
             <CitationDialog
               paper={{
                 title: paper.title,
                 authors: [
                   { name: paper.author?.name || "Unknown" },
-                  ...paper.coAuthors.sort((a, b) => a.order - b.order).map(ca => ({ name: ca.name })),
+                  ...paper.coAuthors
+                    .sort((a, b) => a.order - b.order)
+                    .map((ca) => ({ name: ca.name })),
                 ],
                 doi: paper.doi,
                 publicationDate: paper.publicationDate?.toISOString() || null,
@@ -93,8 +144,8 @@ export default async function PaperDetailPage({
                 issue: paper.issue,
               }}
             />
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
       <PaperViewTracker paperId={paper.paperId} />
     </div>
