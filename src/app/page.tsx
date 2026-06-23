@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, FileText, Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewsletterForm } from "@/components/shared/newsletter-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PaperCard } from "@/components/papers/paper-card";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -20,10 +21,10 @@ export default async function HomePage() {
       <section className="relative py-20 md:py-32 bg-gradient-to-b from-muted/50 to-background">
         <div className="container">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+            <h1 className="font-serif font-bold text-5xl sm:text-6xl tracking-tight mb-6">
               Paperas
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-lg text-muted-foreground max-w-2xl mb-8">
               A peer-reviewed academic journal dedicated to publishing quality
               research across various disciplines. advancing knowledge and
               fostering scholarly excellence.
@@ -54,8 +55,8 @@ export default async function HomePage() {
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">150+</div>
-                <p className="text-xs text-muted-foreground">Research articles</p>
+                <div className="font-serif font-bold text-4xl">150+</div>
+                <p className="text-sm text-muted-foreground">Research articles</p>
               </CardContent>
             </Card>
             <Card>
@@ -64,8 +65,8 @@ export default async function HomePage() {
                 <BookOpen className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">12</div>
-                <p className="text-xs text-muted-foreground">Volumes published</p>
+                <div className="font-serif font-bold text-4xl">12</div>
+                <p className="text-sm text-muted-foreground">Volumes published</p>
               </CardContent>
             </Card>
             <Card>
@@ -74,8 +75,8 @@ export default async function HomePage() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">45+</div>
-                <p className="text-xs text-muted-foreground">Expert reviewers</p>
+                <div className="font-serif font-bold text-4xl">45+</div>
+                <p className="text-sm text-muted-foreground">Expert reviewers</p>
               </CardContent>
             </Card>
             <Card>
@@ -84,8 +85,8 @@ export default async function HomePage() {
                 <Search className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">2000+</div>
-                <p className="text-xs text-muted-foreground">Total citations</p>
+                <div className="font-serif font-bold text-4xl">2000+</div>
+                <p className="text-sm text-muted-foreground">Total citations</p>
               </CardContent>
             </Card>
           </div>
@@ -95,7 +96,7 @@ export default async function HomePage() {
       <section className="py-16 bg-muted/30">
         <div className="container">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Latest Publications</h2>
+            <h2 className="font-serif font-semibold text-2xl">Latest Publications</h2>
             <Link href="/journal">
               <Button variant="ghost">View All</Button>
             </Link>
@@ -104,37 +105,7 @@ export default async function HomePage() {
           {papers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {papers.map((paper) => (
-                <Card key={paper.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center gap-2 mb-2">
-                      {paper.category && (
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                          {paper.category.name}
-                        </span>
-                      )}
-                    </div>
-                    <CardTitle className="line-clamp-2 text-lg">
-                      <Link href={`/research/${paper.paperId}`}>
-                        {paper.title}
-                      </Link>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
-                      {paper.abstract}
-                    </p>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        {paper.author?.name}
-                      </span>
-                      {paper.publicationDate && (
-                        <span className="text-muted-foreground">
-                          {new Date(paper.publicationDate).toLocaleDateString()}
-                        </span>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
+                <PaperCard key={paper.id} paper={paper} />
               ))}
             </div>
           ) : (
@@ -149,7 +120,7 @@ export default async function HomePage() {
       <section className="py-16">
         <div className="container">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
+            <h2 className="font-serif font-semibold text-2xl mb-4">Stay Updated</h2>
             <p className="text-muted-foreground mb-8">
               Subscribe to our newsletter to receive the latest updates on new
               publications and journal announcements.
