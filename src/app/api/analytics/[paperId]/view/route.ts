@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { incrementPaperView } from "@/lib/analytics";
+import { incrementPaperView } from "@/lib/services";
 
 export async function POST(
   _request: Request,

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { incrementPaperDownload } from "@/lib/analytics";
+import { incrementPaperDownload } from "@/lib/services";
 
 export async function POST(
   _request: Request,
