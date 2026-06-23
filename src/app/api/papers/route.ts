@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
-import { generatePaperId } from "@/lib/utils";
+import { generatePaperId } from "@/lib/utils/utils";
 import { z } from "zod";
 
 const paperSchema = z.object({

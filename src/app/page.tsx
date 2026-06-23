@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, FileText, Search, Users } from "lucide-react";
+import { BookOpen, FileText, Search, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewsletterForm } from "@/components/shared/newsletter-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PaperCard } from "@/components/papers/paper-card";
+import { CTASection } from "@/components/ui/hero-dithering-card";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -18,112 +18,66 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="relative py-20 md:py-32 bg-gradient-to-b from-muted/50 to-background">
-        <div className="container">
-          <div className="max-w-3xl">
-            <h1 className="font-serif font-bold text-5xl sm:text-6xl tracking-tight mb-6">
-              Paperas
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mb-8">
-              A peer-reviewed academic journal dedicated to publishing quality
-              research across various disciplines. advancing knowledge and
-              fostering scholarly excellence.
-            </p>
-            <div className="flex gap-4">
-              <Link href="/about/aim-scope">
-                <Button size="lg">
-                  Submit Paper
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/journal">
-                <Button variant="outline" size="lg">
-                  Browse Archives
-                </Button>
-              </Link>
-            </div>
+      <CTASection />
+
+      {/* Stats Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: FileText, label: "Published Papers", value: "150+", sub: "Research articles" },
+              { icon: BookOpen, label: "Active Issues", value: "12", sub: "Volumes published" },
+              { icon: Users, label: "Reviewers", value: "45+", sub: "Expert reviewers" },
+              { icon: Search, label: "Citations", value: "2000+", sub: "Total citations" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col items-center text-center p-6 rounded-[24px] border border-border bg-card"
+              >
+                <stat.icon className="h-5 w-5 text-primary mb-3" aria-hidden="true" />
+                <div className="font-serif font-bold text-3xl md:text-4xl mb-1">{stat.value}</div>
+                <p className="text-sm text-muted-foreground">{stat.sub}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Published Papers</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-serif font-bold text-4xl">150+</div>
-                <p className="text-sm text-muted-foreground">Research articles</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Active Issues</CardTitle>
-                <BookOpen className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-serif font-bold text-4xl">12</div>
-                <p className="text-sm text-muted-foreground">Volumes published</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Reviewers</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-serif font-bold text-4xl">45+</div>
-                <p className="text-sm text-muted-foreground">Expert reviewers</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Citations</CardTitle>
-                <Search className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="font-serif font-bold text-4xl">2000+</div>
-                <p className="text-sm text-muted-foreground">Total citations</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-muted/30">
-        <div className="container">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="font-serif font-semibold text-2xl">Latest Publications</h2>
+      {/* Publications Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-serif font-semibold text-xl">Latest Publications</h2>
             <Link href="/journal">
-              <Button variant="ghost">View All</Button>
+              <Button variant="ghost" size="sm" className="rounded-full gap-2">
+                View All
+                <ArrowRight className="h-4 w-4" />
+              </Button>
             </Link>
           </div>
 
           {papers.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {papers.map((paper) => (
                 <PaperCard key={paper.id} paper={paper} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              <BookOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No publications yet. Be the first to submit!</p>
+            <div className="text-center py-16 rounded-[24px] border border-border bg-card">
+              <BookOpen className="h-10 w-10 mx-auto mb-3 text-muted-foreground" aria-hidden="true" />
+              <p className="text-muted-foreground text-sm">No publications yet. Be the first to submit!</p>
             </div>
           )}
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-serif font-semibold text-2xl mb-4">Stay Updated</h2>
-            <p className="text-muted-foreground mb-8">
-              Subscribe to our newsletter to receive the latest updates on new
-              publications and journal announcements.
+      {/* Newsletter Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-xl mx-auto text-center p-8 md:p-12 rounded-[24px] border border-border bg-card">
+            <h2 className="font-serif font-semibold text-xl mb-3">Stay Updated</h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Subscribe to receive the latest updates on new publications and journal announcements.
             </p>
             <NewsletterForm />
           </div>

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server"
-import { generateListRecords } from "@/lib/oai-pmh"
+import { generateListRecords } from "@/lib/services/oai-pmh"
 
 function escapeXml(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;")

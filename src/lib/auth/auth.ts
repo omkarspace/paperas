@@ -3,7 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
-import { db } from "./db";
+import { db } from "../db";
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
 

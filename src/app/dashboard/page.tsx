@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Clock, CheckCircle, XCircle } from "lucide-react";

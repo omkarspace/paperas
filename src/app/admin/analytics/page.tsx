@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

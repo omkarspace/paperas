@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 import { db } from "@/lib/db"
-import { sendPasswordResetEmail } from "@/lib/email"
+import { sendPasswordResetEmail } from '@/lib/services/email'
 
 export async function POST(request: NextRequest) {
   const { email } = await request.json()

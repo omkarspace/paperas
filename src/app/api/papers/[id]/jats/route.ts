@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateJATS } from "@/lib/jats";
+import { generateJATS } from "@/lib/services/jats";
 
 export async function GET(
   request: Request,

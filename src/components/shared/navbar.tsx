@@ -1,176 +1,124 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { BookOpen, Menu, X, User } from "lucide-react";
-import { useState } from "react";
-import { useSession, signOut } from "next-auth/react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { NotificationBell } from "@/components/shared/notification-bell";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { BookOpen, Menu, X, User } from "lucide-react"
+import { useState } from "react"
+import { useSession, signOut } from "next-auth/react"
+import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { NotificationBell } from "@/components/shared/notification-bell"
+import { cn } from "@/lib/utils/utils"
 
-const navigation = [
+const navLinks = [
   { name: "Home", href: "/" },
   { name: "Journal", href: "/journal" },
   { name: "Research", href: "/research" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
-];
+]
 
 const aboutLinks = [
   { name: "Aim & Scope", href: "/about/aim-scope" },
   { name: "Editorial Board", href: "/about/editorial-board" },
   { name: "Author Guidelines", href: "/about/author-guidelines" },
   { name: "Publication Ethics", href: "/about/publication-ethics" },
-];
+]
 
 export function Navbar() {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
-  const { data: session } = useSession();
+  const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
+  const { data: session } = useSession()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <BookOpen className="h-6 w-6" />
-          <span className="text-xl font-serif font-semibold">Paperas</span>
+    <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-6">
+      <nav className="mx-auto max-w-7xl flex items-center justify-between h-14 px-4 rounded-full border border-border bg-card/80 backdrop-blur-md shadow-sm">
+        <Link href="/" className="flex items-center gap-2">
+          <BookOpen className="h-5 w-5 text-primary" />
+          <span className="text-base font-serif font-semibold">Paperas</span>
         </Link>
 
-        <nav className="hidden md:flex ml-8">
-          {navigation.map((item) => (
+        <div className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => (
             <Link
-              key={item.href}
-              href={item.href}
+              key={link.href}
+              href={link.href}
               className={cn(
-                "px-4 py-2 text-xs font-medium tracking-wide uppercase transition-colors hover:text-primary",
-                pathname === item.href
-                  ? "border-b-2 border-primary pb-1 -mb-1"
-                  : "text-muted-foreground"
+                "px-3 py-1.5 text-xs font-medium tracking-wide uppercase rounded-full transition-colors",
+                pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
-              {item.name}
+              {link.name}
             </Link>
           ))}
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="px-4 py-2 text-xs font-medium tracking-wide uppercase text-muted-foreground">
-                  About
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                    <li className="row-span-3">
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/about"
-                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                        >
-                          <div className="mb-2 mt-4 text-lg font-medium">
-                            About Journal
-                          </div>
-                          <p className="text-sm leading-tight text-muted-foreground">
-                            Learn about our mission, history, and commitment to
-                            academic excellence.
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    {aboutLinks.map((link) => (
-                      <li key={link.href}>
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href={link.href}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">
-                              {link.name}
-                            </div>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </nav>
+        </div>
 
-        <div className="hidden md:flex ml-auto items-center gap-2">
+        <div className="hidden md:flex items-center gap-1">
           <NotificationBell />
           <ThemeToggle />
           {session ? (
             <>
               <Link href="/profile">
-                <Button variant="ghost" size="sm">
-                  <User className="h-4 w-4 mr-1" />
-                  Profile
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" aria-label="Profile">
+                  <User className="h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="ghost" size="sm" onClick={() => signOut()}>
+              <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full text-xs" onClick={() => signOut()}>
                 Logout
               </Button>
             </>
           ) : (
             <>
               <Link href="/auth/login">
-                <Button variant="ghost">Login</Button>
+                <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full text-xs">Login</Button>
               </Link>
               <Link href="/auth/register">
-                <Button>Register</Button>
+                <Button size="sm" className="h-8 px-3 rounded-full text-xs">Register</Button>
               </Link>
             </>
           )}
         </div>
 
         <button
-          className="md:hidden ml-auto p-3 min-h-[44px] min-w-[44px]"
+          className="md:hidden p-2"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
-      </div>
+      </nav>
 
       {isOpen && (
-        <nav className="md:hidden border-t p-4 animate-in slide-in-from-top-2 duration-200">
-          {navigation.map((item) => (
+        <div className="md:hidden mt-2 mx-auto max-w-7xl rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-lg p-3 animate-in slide-in-from-top-2 duration-200 [[data-reduced-motion=reduce]:animate-none]">
+          {navLinks.map((link) => (
             <Link
-              key={item.href}
-              href={item.href}
+              key={link.href}
+              href={link.href}
               className={cn(
-                "block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors",
-                pathname === item.href
-                  ? "text-primary font-semibold"
-                  : "text-muted-foreground hover:text-primary"
+                "block px-4 py-2.5 text-sm font-medium rounded-xl transition-colors",
+                pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}
               onClick={() => setIsOpen(false)}
             >
-              {item.name}
+              {link.name}
             </Link>
           ))}
-          <div className="border-t mt-4 pt-4">
+          <div className="border-t mt-2 pt-2">
             {session ? (
               <>
                 <Link
                   href="/profile"
-                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors hover:text-primary"
+                  className="block px-4 py-2.5 text-sm font-medium rounded-xl transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
                   onClick={() => setIsOpen(false)}
                 >
                   Profile
                 </Link>
                 <button
-                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium text-left w-full transition-colors hover:text-primary"
+                  className="block px-4 py-2.5 text-sm font-medium text-left w-full rounded-xl transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
                   onClick={() => { setIsOpen(false); signOut(); }}
                 >
                   Logout
@@ -180,14 +128,14 @@ export function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors hover:text-primary"
+                  className="block px-4 py-2.5 text-sm font-medium rounded-xl transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
                   onClick={() => setIsOpen(false)}
                 >
                   Login
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="block py-3 min-h-[44px] min-w-[44px] text-sm font-medium transition-colors hover:text-primary"
+                  className="block px-4 py-2.5 text-sm font-medium rounded-xl transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
                   onClick={() => setIsOpen(false)}
                 >
                   Register
@@ -195,8 +143,8 @@ export function Navbar() {
               </>
             )}
           </div>
-        </nav>
+        </div>
       )}
-    </header>
-  );
+    </div>
+  )
 }
