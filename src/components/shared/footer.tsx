@@ -1,78 +1,107 @@
 import Link from "next/link";
-import { BookOpen, Mail, Phone, MapPin } from "lucide-react";
+import { BookOpen, Mail } from "lucide-react";
+
+const footerLinks = {
+  about: [
+    { href: "/about", label: "About Us" },
+    { href: "/about#editorial-board", label: "Editorial Board" },
+    { href: "/journal", label: "Journal Scope" },
+    { href: "/contact", label: "Contact" },
+  ],
+  authors: [
+    { href: "/auth/register", label: "Submit Paper" },
+    { href: "/dashboard", label: "Author Dashboard" },
+    { href: "/journal#guidelines", label: "Submission Guidelines" },
+    { href: "/journal#ethics", label: "Publication Ethics" },
+  ],
+  reviewers: [
+    { href: "/auth/login", label: "Reviewer Login" },
+    { href: "/reviewer", label: "Reviewer Dashboard" },
+    { href: "/journal#review-process", label: "Review Process" },
+  ],
+};
 
 export function Footer() {
   return (
-    <footer className="border-t bg-muted/30">
-      <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <Link href="/" className="flex items-center space-x-2 mb-4">
-              <BookOpen className="h-6 w-6" />
-              <span className="text-xl font-serif font-semibold">Paperas</span>
+    <footer className="border-t border-border bg-primary text-primary-foreground">
+      <div className="container mx-auto max-w-7xl px-4 py-12 md:px-6">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {/* Brand */}
+          <div className="space-y-4">
+            <Link href="/" className="flex items-center gap-2">
+              <BookOpen className="h-6 w-6 text-secondary" />
+              <span className="font-serif text-xl font-bold">Research Verse</span>
             </Link>
-            <p className="text-sm text-muted-foreground mb-4">
-              Paperas is an
-              peer-reviewed academic journal dedicated to publishing quality
-              research across various disciplines.
+            <p className="text-sm text-primary-foreground/70">
+              A peer-reviewed journal committed to open access, rigorous review, and scholarly excellence.
             </p>
-            <p className="text-sm text-muted-foreground">
-              ISSN: RVJ-2026-0001
-            </p>
+            <div className="flex gap-4 text-primary-foreground/70">
+              <Mail className="h-4 w-4" />
+              <span className="text-sm">editor@researchverse.in</span>
+            </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-medium tracking-wide uppercase text-muted-foreground mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/about/aim-scope" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Aim & Scope
-                </Link>
-              </li>
-              <li>
-                <Link href="/about/editorial-board" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Editorial Board
-                </Link>
-              </li>
-              <li>
-                <Link href="/about/author-guidelines" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Author Guidelines
-                </Link>
-              </li>
-              <li>
-                <Link href="/about/publication-ethics" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Publication Ethics
-                </Link>
-              </li>
+          {/* About */}
+          <div className="space-y-4">
+            <h3 className="font-serif font-semibold">About</h3>
+            <ul className="space-y-2">
+              {footerLinks.about.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-primary-foreground/70 hover:text-secondary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-sm font-medium tracking-wide uppercase text-muted-foreground mb-4">Contact</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2 text-muted-foreground">
-                <Mail className="h-4 w-4" />
-                <span>editor@paperas.dev</span>
-              </li>
-              <li className="flex items-center gap-2 text-muted-foreground">
-                <Phone className="h-4 w-4" />
-                <span>+91 XXX XXX XXXX</span>
-              </li>
-              <li className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="h-4 w-4" />
-                <span>India</span>
-              </li>
+          {/* For Authors */}
+          <div className="space-y-4">
+            <h3 className="font-serif font-semibold">For Authors</h3>
+            <ul className="space-y-2">
+              {footerLinks.authors.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-primary-foreground/70 hover:text-secondary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* For Reviewers */}
+          <div className="space-y-4">
+            <h3 className="font-serif font-semibold">For Reviewers</h3>
+            <ul className="space-y-2">
+              {footerLinks.reviewers.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-primary-foreground/70 hover:text-secondary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        <div className="border-t mt-12 pt-8 text-center text-xs text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Paperas. All rights reserved.</p>
+        {/* Bottom Bar */}
+        <div className="mt-12 border-t border-primary-foreground/20 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-primary-foreground/50">
+            &copy; {new Date().getFullYear()} Research Verse Journal And Publication House Of India. All rights reserved.
+          </p>
+          <div className="flex gap-4 text-xs text-primary-foreground/50">
+            <Link href="/privacy" className="hover:text-secondary transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-secondary transition-colors">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>
