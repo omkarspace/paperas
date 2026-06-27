@@ -1,94 +1,54 @@
-import { auth } from '@/lib/auth/auth';
-import { db } from "@/lib/db";
+import { FileText, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { MetricCard } from "@/components/dashboard/metric-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-export const dynamic = "force-dynamic";
+const recentActivity = [
+  { title: "ML Approaches for Crop Prediction", status: "Under Review", date: "2026-06-15" },
+  { title: "Sustainable Water Management", status: "Accepted", date: "2026-06-10" },
+  { title: "Traditional Medicine Review", status: "Revision Required", date: "2026-06-05" },
+  { title: "Blockchain Land Registry", status: "Published", date: "2026-05-28" },
+];
 
-export default async function DashboardPage() {
-  const session = await auth();
-  if (!session?.user?.id) return null;
+const statusColors: Record<string, string> = {
+  "Under Review": "bg-blue-100 text-blue-800",
+  "Accepted": "bg-green-100 text-green-800",
+  "Revision Required": "bg-yellow-100 text-yellow-800",
+  "Published": "bg-purple-100 text-purple-800",
+};
 
-  const papers = await db.paper.findMany({
-    where: { authorId: session.user.id },
-    orderBy: { createdAt: "desc" },
-  });
-
-  const stats = {
-    total: papers.length,
-    draft: papers.filter((p) => p.status === "DRAFT").length,
-    underReview: papers.filter((p) => p.status === "UNDER_REVIEW").length,
-    published: papers.filter((p) => p.status === "PUBLISHED").length,
-  };
-
+export default function DashboardPage() {
   return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Submissions</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif font-bold text-3xl">{stats.total}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Under Review</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif font-bold text-3xl">{stats.underReview}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Published</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif font-bold text-3xl">{stats.published}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Drafts</CardTitle>
-            <XCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif font-bold text-3xl">{stats.draft}</div>
-          </CardContent>
-        </Card>
+    <div className="space-y-6">
+      <h1 className="font-serif text-2xl font-semibold text-primary">Dashboard</h1>
+
+      {/* Metric Cards */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <MetricCard title="Total Papers" value={12} icon={FileText} variant="default" />
+        <MetricCard title="Pending Review" value={3} icon={Clock} variant="secondary" />
+        <MetricCard title="Published" value={7} icon={CheckCircle} variant="accent" />
+        <MetricCard title="Revisions Needed" value={2} icon={AlertCircle} variant="default" />
       </div>
 
+      {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Submissions</CardTitle>
+          <CardTitle className="font-serif text-lg">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
-          {papers.length > 0 ? (
-            <div className="space-y-4">
-              {papers.slice(0, 5).map((paper) => (
-                <div
-                  key={paper.id}
-                  className="flex items-center justify-between border-b pb-4 last:border-0"
-                >
-                  <div>
-                    <p className="font-serif font-medium">{paper.title}</p>
-                    <p className="font-mono text-xs text-muted-foreground">
-                      {paper.paperId} - {paper.status}
-                    </p>
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {new Date(paper.createdAt).toLocaleDateString()}
-                  </span>
+          <div className="space-y-4">
+            {recentActivity.map((item) => (
+              <div key={item.title} className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0">
+                <div>
+                  <p className="font-medium text-sm">{item.title}</p>
+                  <p className="text-xs text-muted-foreground">{item.date}</p>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-muted-foreground">No submissions yet.</p>
-          )}
+                <Badge className={statusColors[item.status] || ""} variant="secondary">
+                  {item.status}
+                </Badge>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>
