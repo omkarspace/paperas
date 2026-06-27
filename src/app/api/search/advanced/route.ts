@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const page = Number(searchParams.get('page')) || 1
   const limit = 20
 
-  const where: any = {
+  const where: Record<string, unknown> = {
     status: status as PaperStatus,
   }
 

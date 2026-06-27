@@ -12,7 +12,7 @@ const reviewSchema = z.object({
   qualityRating: z.number().min(1).max(5).optional(),
 });
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

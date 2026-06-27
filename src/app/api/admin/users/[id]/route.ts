@@ -27,7 +27,7 @@ export async function PATCH(
     });
 
     return NextResponse.json(user);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
 }

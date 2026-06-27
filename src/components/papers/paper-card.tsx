@@ -7,8 +7,6 @@ interface PaperCardProps {
 }
 
 export function PaperCard({ paper }: PaperCardProps) {
-  const isPublished = paper.status === 'PUBLISHED'
-
   return (
     <Link href={'/research/' + paper.paperId}>
       <article className="group h-full p-5 rounded-2xl border border-border bg-card hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">

@@ -28,7 +28,7 @@ export async function POST(
     });
 
     return NextResponse.json(updated);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to submit revision" }, { status: 500 });
   }
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
 import { generatePaperId } from "@/lib/utils/utils";
+import { PaperStatus } from "@prisma/client";
 import { z } from "zod";
 
 const paperSchema = z.object({
@@ -50,7 +51,7 @@ export async function GET(request: Request) {
   const page = Number(searchParams.get("page")) || 1;
   const limit = 20;
 
-  const where = status ? { status: status as any } : {};
+  const where = status ? { status: status as PaperStatus } : {};
 
   const [papers, total] = await Promise.all([
     db.paper.findMany({

@@ -7,8 +7,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
-  const { journalName, issn, doiPrefix, email } = body;
+  const _body = await request.json();
 
   return NextResponse.json({ message: "Settings saved" });
 }

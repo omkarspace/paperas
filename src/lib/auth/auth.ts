@@ -29,8 +29,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       token: "https://orcid.org/oauth/token",
       userinfo: {
         url: "https://pub.orcid.org/v3.0/",
-        request: async ({ tokens }: { tokens: any }) => {
-          const orcid = tokens.id_token || (tokens as any)?.orcid
+        request: async ({ tokens }: { tokens: Record<string, unknown> }) => {
+          const orcid = tokens.id_token || (tokens as Record<string, unknown>)?.orcid
           const res = await fetch(`https://pub.orcid.org/v3.0/${orcid}/record`, {
             headers: { Authorization: `Bearer ${tokens.access_token}` },
           })

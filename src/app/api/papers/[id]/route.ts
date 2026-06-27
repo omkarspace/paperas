@@ -48,7 +48,7 @@ export async function PATCH(
     });
 
     return NextResponse.json(updated);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }
@@ -77,7 +77,7 @@ export async function DELETE(
     await db.paper.delete({ where: { id } });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }

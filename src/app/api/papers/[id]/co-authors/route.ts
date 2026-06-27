@@ -54,7 +54,7 @@ export async function POST(
     });
 
     return NextResponse.json({ coAuthor }, { status: 201 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to add co-author" }, { status: 500 });
   }
 }
@@ -86,7 +86,7 @@ export async function DELETE(
     await db.coAuthor.delete({ where: { id: coAuthorId } });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to delete co-author" }, { status: 500 });
   }
 }

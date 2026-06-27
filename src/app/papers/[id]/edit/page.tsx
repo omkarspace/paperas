@@ -12,7 +12,7 @@ export default function EditPaperPage() {
   const router = useRouter();
   const params = useParams();
   const [loading, setLoading] = useState(false);
-  const [paper, setPaper] = useState<any>(null);
+  const [paper, setPaper] = useState<Record<string, unknown> | null>(null);
 
   const [formData, setFormData] = useState({
     title: "",

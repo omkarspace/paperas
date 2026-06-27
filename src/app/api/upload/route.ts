@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const key = generateS3Key(session.user.id, file.name)
     const url = await uploadPDF(buffer, key)
     return NextResponse.json({ url })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Upload failed" }, { status: 500 })
   }
 }
