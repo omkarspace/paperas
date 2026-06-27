@@ -1,75 +1,38 @@
-"use client"
-
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("")
-  const [sent, setSent] = useState(false)
-  const [error, setError] = useState("")
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError("")
-
-    const res = await fetch("/api/auth/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    })
-
-    if (res.ok) {
-      setSent(true)
-    } else {
-      const data = await res.json()
-      setError(data.error || "Something went wrong")
-    }
-  }
-
-  if (sent) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="w-full max-w-md border rounded-md shadow-none">
-          <CardHeader>
-            <CardTitle className="font-serif font-bold text-2xl">Check your email</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              If an account exists for {email}, we&apos;ve sent a password reset link.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="w-full max-w-md border rounded-md shadow-none">
-        <CardHeader>
-          <CardTitle className="font-serif font-bold text-2xl">Forgot password</CardTitle>
+    <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <Link href="/" className="mx-auto mb-4">
+            <BookOpen className="h-10 w-10 text-primary" />
+          </Link>
+          <CardTitle className="font-serif text-2xl">Reset Password</CardTitle>
+          <CardDescription>Enter your email to receive a reset link</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              type="email"
-              placeholder="Email"
-              className="h-11 rounded-md"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full h-11 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm">Send reset link</Button>
-            <p className="text-sm text-center text-muted-foreground">
-              <Link href="/auth/login" className="hover:underline">Back to login</Link>
+          <form className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="you@university.edu" required />
+            </div>
+            <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+              Send Reset Link
+            </Button>
+            <p className="text-center text-sm text-muted-foreground">
+              <Link href="/auth/login" className="text-primary hover:underline">
+                Back to Sign In
+              </Link>
             </p>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
