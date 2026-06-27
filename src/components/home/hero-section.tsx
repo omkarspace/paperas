@@ -1,74 +1,65 @@
-"use client"
-
-import { ArrowRight } from "lucide-react"
-import { useState, Suspense, lazy } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-
-const Dithering = lazy(() =>
-  import("@paper-design/shaders-react").then((mod) => ({ default: mod.Dithering }))
-)
+import Link from "next/link";
+import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function HeroSection() {
-  const [isHovered, setIsHovered] = useState(false)
-
   return (
-    <section className="py-12 w-full flex justify-center items-center px-4 md:px-6">
-      <div
-        className="w-full max-w-7xl relative"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-sm min-h-[520px] flex flex-col items-center justify-center duration-500">
-          <Suspense fallback={<div className="absolute inset-0 bg-muted/20" />}>
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen">
-              <Dithering
-                colorBack="#00000000"
-                colorFront="#EC4E02"
-                shape="warp"
-                type="4x4"
-                speed={isHovered ? 0.6 : 0.2}
-                className="size-full"
-                minPixelRatio={1}
+    <section className="relative overflow-hidden bg-primary py-20 md:py-32">
+      {/* Decorative elements */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+
+      <div className="container relative mx-auto max-w-7xl px-4 md:px-6">
+        <div className="mx-auto max-w-3xl text-center">
+          <h1 className="font-serif text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl md:text-6xl">
+            Advancing Research{" "}
+            <span className="text-secondary">in India</span>
+          </h1>
+          <p className="mt-6 text-lg text-primary-foreground/80 md:text-xl">
+            A peer-reviewed journal committed to open access, rigorous review, and scholarly excellence.
+          </p>
+
+          {/* Search Bar */}
+          <div className="mt-10 flex w-full max-w-md mx-auto">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search papers, authors, DOIs..."
+                className="h-12 pl-10 pr-4 rounded-r-none bg-background text-foreground border-r-0"
               />
             </div>
-          </Suspense>
+            <Button
+              type="submit"
+              size="lg"
+              className="h-12 px-8 rounded-l-none bg-secondary text-secondary-foreground hover:bg-secondary/90"
+            >
+              Search
+            </Button>
+          </div>
 
-          <div className="relative z-10 px-6 max-w-4xl mx-auto text-center flex flex-col items-center">
-            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 [[data-reduced-motion=reduce]:animate-none]"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              Peer-Reviewed & Open Access
-            </div>
-
-            <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-foreground mb-8 leading-[1.05]">
-              Your research, <br />
-              <span className="text-foreground/80">amplified globally.</span>
-            </h2>
-
-            <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mb-12 leading-relaxed">
-              Join thousands of researchers publishing in a journal committed to rigorous peer review, open access, and advancing knowledge across every discipline.
-            </p>
-
-            <div className="flex items-center gap-4">
-              <Link
-                href="/papers/submit"
-                className="group relative inline-flex h-14 items-center justify-center gap-3 overflow-hidden rounded-full bg-primary px-12 text-base font-medium text-primary-foreground transition-transform duration-300 hover:bg-primary/90 hover:scale-105 active:scale-95 hover:ring-4 hover:ring-primary/20"
-              >
-                <span className="relative z-10">Submit Your Paper</span>
-                <ArrowRight className="h-5 w-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-              <Link href="/journal">
-                <Button variant="ghost" size="lg" className="rounded-full px-8">
-                  Browse Publications
-                </Button>
-              </Link>
-            </div>
+          {/* CTA */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="lg"
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              asChild
+            >
+              <Link href="/auth/register">Submit Your Paper</Link>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+              asChild
+            >
+              <Link href="/journal">Browse Journal</Link>
+            </Button>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
