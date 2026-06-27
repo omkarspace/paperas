@@ -1,143 +1,98 @@
-import type { Metadata } from "next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Navbar } from "@/components/shared/navbar";
+import { Footer } from "@/components/shared/footer";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Contact Us",
-  description: "Get in touch with Paperas journal for submission inquiries, editorial questions, and general information.",
-  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL}/contact` },
-};
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function ContactPage() {
   return (
-    <div className="container py-12">
-      <h1 className="font-serif font-bold text-3xl mb-8">Contact Us</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div>
-          <section className="mb-8">
-            <h2 className="font-serif font-semibold mb-4">Get in Touch</h2>
-            <p className="text-muted-foreground">
-              Have questions about submissions, the journal, or general
-              inquiries? We&apos;re here to help. Reach out through any of
-              the methods below.
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="bg-primary py-20">
+          <div className="container mx-auto max-w-7xl px-4 md:px-6 text-center">
+            <h1 className="font-serif text-4xl font-bold text-primary-foreground">Contact Us</h1>
+            <p className="mt-4 text-primary-foreground/80">
+              Get in touch with our editorial team
             </p>
-          </section>
-
-          <div className="space-y-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <Mail className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <p className="text-sm text-muted-foreground">
-                      editor@paperas.dev
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <Phone className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-sm text-muted-foreground">
-                      +91 XXX XXX XXXX
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Address</p>
-                    <p className="text-sm text-muted-foreground">
-                      Paperas
-                      <br />
-                      India
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <Clock className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Office Hours</p>
-                    <p className="text-sm text-muted-foreground">
-                      Monday - Friday: 9:00 AM - 6:00 PM IST
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
-        </div>
+        </section>
 
-        <div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Send us a Message</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" placeholder="Your name" required className="h-11" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="you@example.com"
-                      required
-                      className="h-11"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Input
-                    id="subject"
-                    placeholder="Inquiry about..."
-                    required
-                    className="h-11"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Your message..."
-                    className="min-h-[150px]"
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  Send Message
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+        {/* Contact Content */}
+        <section className="py-20">
+          <div className="container mx-auto max-w-7xl px-4 md:px-6">
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* Form */}
+              <Card>
+                <CardContent className="pt-6">
+                  <form className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" placeholder="Your name" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" type="email" placeholder="you@university.edu" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="subject">Subject</Label>
+                      <Input id="subject" placeholder="How can we help?" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Message</Label>
+                      <Textarea id="message" rows={5} placeholder="Your message..." />
+                    </div>
+                    <Button type="submit" className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90">
+                      Send Message
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+
+              {/* Details */}
+              <div className="space-y-6">
+                <Card>
+                  <CardContent className="pt-6 flex items-start gap-4">
+                    <MapPin className="h-5 w-5 text-secondary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Address</p>
+                      <p className="text-sm text-muted-foreground">
+                        Research Verse Journal And Publication House Of India<br />
+                        New Delhi, India
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6 flex items-start gap-4">
+                    <Mail className="h-5 w-5 text-secondary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Email</p>
+                      <p className="text-sm text-muted-foreground">editor@researchverse.in</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6 flex items-start gap-4">
+                    <Phone className="h-5 w-5 text-secondary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Phone</p>
+                      <p className="text-sm text-muted-foreground">+91 11 1234 5678</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
     </div>
   );
 }
