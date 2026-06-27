@@ -1,51 +1,53 @@
-import { BookOpen, Shield, Globe, Zap } from "lucide-react"
+import { BookOpen, ClipboardCheck, Unlock } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const features = [
+const highlights = [
   {
     icon: BookOpen,
+    title: "Scope & Aims",
+    description: "Publishing rigorous research across science, technology, medicine, and social sciences. We welcome original research, reviews, and short communications.",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "Peer Review Process",
+    description: "Double-blind peer review by expert academics. Editorial decisions within 4-6 weeks. Transparent and constructive feedback guaranteed.",
+  },
+  {
+    icon: Unlock,
     title: "Open Access",
-    description: "Every published paper is freely available to researchers, students, and the public worldwide.",
+    description: "All published articles are freely accessible worldwide. No subscription fees for readers. Author-friendly publication charges.",
   },
-  {
-    icon: Shield,
-    title: "Rigorous Review",
-    description: "Double-blind peer review by domain experts ensures quality and integrity.",
-  },
-  {
-    icon: Globe,
-    title: "Global Reach",
-    description: "Indexed and discoverable across major academic databases and search engines.",
-  },
-  {
-    icon: Zap,
-    title: "Fast Turnaround",
-    description: "Average 4-6 weeks from submission to first decision.",
-  },
-]
+];
 
 export function FeaturesSection() {
   return (
-    <section className="py-16 px-4">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="font-serif font-semibold text-2xl text-center mb-12">
-          Why Publish with Paperas
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {features.map((feature) => (
-            <div key={feature.title} className="flex gap-4">
-              <div className="bg-primary/10 rounded-full p-3 h-fit">
-                <feature.icon className="h-6 w-6 text-primary" aria-hidden="true" />
-              </div>
-              <div>
-                <h3 className="font-serif font-semibold text-lg mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
-            </div>
+    <section className="py-20 bg-muted/30">
+      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl font-semibold text-primary">
+            Journal Highlights
+          </h2>
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+            Research Verse provides a platform for high-quality academic publishing
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {highlights.map((item) => (
+            <Card key={item.title} className="border-t-2 border-t-secondary">
+              <CardHeader>
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <item.icon className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="font-serif text-xl mt-4">{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">{item.description}</p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
