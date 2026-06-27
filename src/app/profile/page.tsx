@@ -6,8 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
+interface ProfileUser {
+  email?: string;
+  role?: string;
+  orcidId?: string | null;
+  name?: string | null;
+  institution?: string | null;
+  bio?: string | null;
+}
+
 export default function ProfilePage() {
-  const [user, setUser] = useState<Record<string, unknown> | null>(null);
+  const [user, setUser] = useState<ProfileUser | null>(null);
   const [name, setName] = useState("");
   const [institution, setInstitution] = useState("");
   const [bio, setBio] = useState("");

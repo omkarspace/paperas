@@ -8,12 +8,19 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+interface ReviewPaper {
+  id: string;
+  title?: string;
+  paperId?: string;
+  abstract?: string;
+}
+
 export default function ReviewFormPage() {
   const router = useRouter();
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [, setReview] = useState<Record<string, unknown> | null>(null);
-  const [paper, setPaper] = useState<Record<string, unknown> | null>(null);
+  const [paper, setPaper] = useState<ReviewPaper | null>(null);
 
   const [formData, setFormData] = useState({
     comments: "",
@@ -43,7 +50,7 @@ export default function ReviewFormPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          paperId: paper.id,
+          paperId: paper?.id,
           comments: formData.comments,
           recommendation: formData.recommendation,
           rating: formData.rating ? parseInt(formData.rating) : null,
