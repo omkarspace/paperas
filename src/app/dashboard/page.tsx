@@ -1,54 +1,94 @@
+import { auth } from "@/lib/auth/auth";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 import { FileText, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const recentActivity = [
-  { title: "ML Approaches for Crop Prediction", status: "Under Review", date: "2026-06-15" },
-  { title: "Sustainable Water Management", status: "Accepted", date: "2026-06-10" },
-  { title: "Traditional Medicine Review", status: "Revision Required", date: "2026-06-05" },
-  { title: "Blockchain Land Registry", status: "Published", date: "2026-05-28" },
-];
+export const dynamic = "force-dynamic";
 
-const statusColors: Record<string, string> = {
-  "Under Review": "bg-blue-100 text-blue-800",
-  "Accepted": "bg-green-100 text-green-800",
-  "Revision Required": "bg-yellow-100 text-yellow-800",
-  "Published": "bg-purple-100 text-purple-800",
+const statusBadge: Record<string, string> = {
+  DRAFT: "bg-muted text-muted-foreground",
+  SUBMITTED: "bg-blue-100 text-blue-800",
+  UNDER_REVIEW: "bg-amber-100 text-amber-800",
+  REVISION_REQUESTED: "bg-orange-100 text-orange-800",
+  ACCEPTED: "bg-green-100 text-green-800",
+  REJECTED: "bg-red-100 text-red-800",
+  PUBLISHED: "bg-purple-100 text-purple-800",
 };
 
-export default function DashboardPage() {
+const statusLabel: Record<string, string> = {
+  DRAFT: "Draft",
+  SUBMITTED: "Submitted",
+  UNDER_REVIEW: "Under Review",
+  REVISION_REQUESTED: "Revision Requested",
+  ACCEPTED: "Accepted",
+  REJECTED: "Rejected",
+  PUBLISHED: "Published",
+};
+
+export default async function DashboardPage() {
+  const session = await auth();
+  if (!session?.user?.id) redirect("/auth/login");
+
+  const papers = await db.paper.findMany({
+    where: { authorId: session.user.id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const stats = {
+    total: papers.length,
+    pending: papers.filter((p) => ["SUBMITTED", "UNDER_REVIEW"].includes(p.status)).length,
+    published: papers.filter((p) => p.status === "PUBLISHED").length,
+    revision: papers.filter((p) => p.status === "REVISION_REQUESTED").length,
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="font-serif text-2xl font-semibold text-primary">Dashboard</h1>
 
-      {/* Metric Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard title="Total Papers" value={12} icon={FileText} variant="default" />
-        <MetricCard title="Pending Review" value={3} icon={Clock} variant="secondary" />
-        <MetricCard title="Published" value={7} icon={CheckCircle} variant="accent" />
-        <MetricCard title="Revisions Needed" value={2} icon={AlertCircle} variant="default" />
+        <MetricCard title="Total Papers" value={stats.total} icon={FileText} variant="default" />
+        <MetricCard title="Pending Review" value={stats.pending} icon={Clock} variant="secondary" />
+        <MetricCard title="Published" value={stats.published} icon={CheckCircle} variant="accent" />
+        <MetricCard title="Revisions Needed" value={stats.revision} icon={AlertCircle} variant="default" />
       </div>
 
-      {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg">Recent Activity</CardTitle>
+          <CardTitle className="font-serif text-lg">My Submissions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {recentActivity.map((item) => (
-              <div key={item.title} className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0">
-                <div>
-                  <p className="font-medium text-sm">{item.title}</p>
-                  <p className="text-xs text-muted-foreground">{item.date}</p>
-                </div>
-                <Badge className={statusColors[item.status] || ""} variant="secondary">
-                  {item.status}
-                </Badge>
-              </div>
-            ))}
-          </div>
+          {papers.length === 0 ? (
+            <p className="text-muted-foreground text-center py-8">
+              No submissions yet.{" "}
+              <Link href="/papers/submit" className="text-primary hover:underline">
+                Submit your first paper
+              </Link>
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {papers.map((paper) => (
+                <Link
+                  key={paper.id}
+                  href={`/research/${paper.id}`}
+                  className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-muted/50 -mx-2 px-2 py-1 rounded transition-colors"
+                >
+                  <div>
+                    <p className="font-medium text-sm">{paper.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {paper.paperId} &middot; {new Date(paper.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <Badge className={statusBadge[paper.status] || ""} variant="secondary">
+                    {statusLabel[paper.status] || paper.status}
+                  </Badge>
+                </Link>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

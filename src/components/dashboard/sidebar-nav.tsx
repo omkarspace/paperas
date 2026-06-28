@@ -8,7 +8,6 @@ import {
   User,
   Settings,
   ClipboardList,
-  CheckCircle,
   Users,
   Tag,
   BarChart3,
@@ -35,20 +34,18 @@ interface NavItem {
 const authorNav: NavItem[] = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { title: "My Submissions", href: "/dashboard/submissions", icon: FileText },
-  { title: "Profile", href: "/dashboard/profile", icon: User },
-  { title: "Settings", href: "/dashboard/settings", icon: Settings },
+  { title: "Profile", href: "/profile", icon: User },
 ];
 
 const reviewerNav: NavItem[] = [
   { title: "Dashboard", href: "/reviewer", icon: LayoutDashboard },
-  { title: "Pending Reviews", href: "/reviewer/pending", icon: ClipboardList },
-  { title: "Completed Reviews", href: "/reviewer/completed", icon: CheckCircle },
+  { title: "My Reviews", href: "/reviewer/reviews", icon: ClipboardList },
 ];
 
 const adminNav: NavItem[] = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Users", href: "/admin/users", icon: Users },
-  { title: "Papers", href: "/admin/papers", icon: FileText },
+  { title: "Submissions", href: "/admin/submissions", icon: FileText },
   { title: "Categories", href: "/admin/categories", icon: Tag },
   { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { title: "Settings", href: "/admin/settings", icon: Settings },

@@ -17,10 +17,10 @@ export default async function AdminUsersPage() {
   });
 
   const roleColors: Record<string, string> = {
-    AUTHOR: "bg-blue-500",
-    REVIEWER: "bg-yellow-500",
-    EDITOR: "bg-purple-500",
-    ADMIN: "bg-red-500",
+    AUTHOR: "bg-blue-50 text-blue-700 border-blue-200",
+    REVIEWER: "bg-amber-50 text-amber-700 border-amber-200",
+    EDITOR: "bg-purple-50 text-purple-700 border-purple-200",
+    ADMIN: "bg-red-50 text-red-700 border-red-200",
   };
 
   return (

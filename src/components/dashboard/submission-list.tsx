@@ -15,13 +15,13 @@ interface SubmissionListProps {
 }
 
 const statusColors: Record<string, string> = {
-  DRAFT: "bg-gray-100 text-gray-800",
-  SUBMITTED: "bg-blue-100 text-blue-800",
-  UNDER_REVIEW: "bg-yellow-100 text-yellow-800",
-  REVISION_REQUESTED: "bg-amber-100 text-amber-800",
-  ACCEPTED: "bg-green-100 text-green-800",
-  PUBLISHED: "bg-purple-100 text-purple-800",
-  REJECTED: "bg-red-100 text-red-800",
+  DRAFT: "bg-muted text-muted-foreground",
+  SUBMITTED: "bg-blue-50 text-blue-700 border-blue-200",
+  UNDER_REVIEW: "bg-amber-50 text-amber-700 border-amber-200",
+  REVISION_REQUESTED: "bg-orange-50 text-orange-700 border-orange-200",
+  ACCEPTED: "bg-green-50 text-green-700 border-green-200",
+  PUBLISHED: "bg-purple-50 text-purple-700 border-purple-200",
+  REJECTED: "bg-red-50 text-red-700 border-red-200",
 };
 
 export function SubmissionList({ submissions }: SubmissionListProps) {
