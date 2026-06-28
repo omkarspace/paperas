@@ -6,6 +6,7 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const session = await auth();
   const { id } = await params;
   
   const paper = await db.paper.findUnique({
@@ -15,6 +16,15 @@ export async function GET(
 
   if (!paper) {
     return NextResponse.json({ error: "Paper not found" }, { status: 404 });
+  }
+
+  // Hide draft papers from non-owners, non-admins, non-editors
+  if (paper.status === "DRAFT") {
+    const isAdminOrEditor = session?.user?.role === "ADMIN" || session?.user?.role === "EDITOR";
+    const isOwner = session?.user?.id === paper.authorId;
+    if (!isAdminOrEditor && !isOwner) {
+      return NextResponse.json({ error: "Paper not found" }, { status: 404 });
+    }
   }
 
   return NextResponse.json(paper);

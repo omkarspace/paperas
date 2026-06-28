@@ -37,10 +37,32 @@ export async function POST(request: Request) {
     const body = await request.json();
     const data = reviewSchema.parse(body);
 
-    const review = await db.review.create({
-      data: {
+    // Verify the reviewer is actually assigned to this paper
+    const existingReview = await db.review.findFirst({
+      where: {
         paperId: data.paperId,
         reviewerId: session.user.id,
+      },
+    });
+
+    if (!existingReview) {
+      return NextResponse.json(
+        { error: "You are not assigned to review this paper" },
+        { status: 403 }
+      );
+    }
+
+    // Check for duplicate submission (review already has comments = not a placeholder)
+    if (existingReview.comments && existingReview.comments.trim() !== "") {
+      return NextResponse.json(
+        { error: "You have already submitted a review for this paper" },
+        { status: 409 }
+      );
+    }
+
+    const review = await db.review.update({
+      where: { id: existingReview.id },
+      data: {
         comments: data.comments,
         recommendation: data.recommendation,
         rating: data.rating,

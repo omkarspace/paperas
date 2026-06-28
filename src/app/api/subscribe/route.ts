@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-
-const subscribers = new Set<string>();
+import { db } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -13,14 +12,32 @@ export async function POST(request: Request) {
       );
     }
 
-    if (subscribers.has(email)) {
+    const existing = await db.subscriber.findUnique({
+      where: { email },
+    });
+
+    if (existing) {
+      if (existing.isActive) {
+        return NextResponse.json(
+          { message: "Already subscribed" },
+          { status: 200 }
+        );
+      }
+      // Re-activate inactive subscriber
+      await db.subscriber.update({
+        where: { email },
+        data: { isActive: true },
+      });
       return NextResponse.json(
-        { message: "Already subscribed" },
+        { message: "Successfully re-subscribed" },
         { status: 200 }
       );
     }
 
-    subscribers.add(email);
+    await db.subscriber.create({
+      data: { email },
+    });
+
     return NextResponse.json(
       { message: "Successfully subscribed" },
       { status: 201 }

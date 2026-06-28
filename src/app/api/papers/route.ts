@@ -46,12 +46,37 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
+  const session = await auth();
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
   const page = Number(searchParams.get("page")) || 1;
   const limit = 20;
 
-  const where = status ? { status: status as PaperStatus } : {};
+  // Build visibility filter: non-draft papers are always visible,
+  // draft papers are only visible to their author, admins, and editors
+  const isAdminOrEditor = session?.user?.role === "ADMIN" || session?.user?.role === "EDITOR";
+  const userId = session?.user?.id;
+
+  let where: Record<string, unknown> = {};
+
+  if (status) {
+    // Explicit status filter (used by admin/submission pages with auth)
+    where = { status: status as PaperStatus };
+  } else if (isAdminOrEditor) {
+    // Admin/Editor see everything
+    where = {};
+  } else if (userId) {
+    // Logged-in user: see published papers + their own drafts/submitted
+    where = {
+      OR: [
+        { status: { not: "DRAFT" } },
+        { authorId: userId },
+      ],
+    };
+  } else {
+    // Anonymous: only published papers
+    where = { status: "PUBLISHED" };
+  }
 
   const [papers, total] = await Promise.all([
     db.paper.findMany({
