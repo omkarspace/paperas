@@ -14,7 +14,7 @@ interface ReviewCardProps {
 const recommendationColors: Record<string, string> = {
   ACCEPT: "bg-green-100 text-green-800",
   MINOR_REVISION: "bg-yellow-100 text-yellow-800",
-  MAJOR_REVISION: "bg-orange-100 text-orange-800",
+  MAJOR_REVISION: "bg-amber-100 text-amber-800",
   REJECT: "bg-red-100 text-red-800",
 };
 

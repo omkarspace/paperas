@@ -22,7 +22,7 @@ export default async function SubmissionsPage() {
     DRAFT: "bg-gray-500",
     SUBMITTED: "bg-blue-500",
     UNDER_REVIEW: "bg-yellow-500",
-    REVISION_REQUESTED: "bg-orange-500",
+    REVISION_REQUESTED: "bg-amber-500",
     ACCEPTED: "bg-green-500",
     PUBLISHED: "bg-primary",
     REJECTED: "bg-red-500",

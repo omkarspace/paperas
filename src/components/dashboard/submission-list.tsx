@@ -18,7 +18,7 @@ const statusColors: Record<string, string> = {
   DRAFT: "bg-gray-100 text-gray-800",
   SUBMITTED: "bg-blue-100 text-blue-800",
   UNDER_REVIEW: "bg-yellow-100 text-yellow-800",
-  REVISION_REQUESTED: "bg-orange-100 text-orange-800",
+  REVISION_REQUESTED: "bg-amber-100 text-amber-800",
   ACCEPTED: "bg-green-100 text-green-800",
   PUBLISHED: "bg-purple-100 text-purple-800",
   REJECTED: "bg-red-100 text-red-800",
