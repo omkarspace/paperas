@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 import { db } from "@/lib/db"
+import { rateLimit } from "@/lib/utils/rate-limit"
 import { sendPasswordResetEmail } from '@/lib/services/email'
 
+function getClientIp(request: NextRequest): string {
+  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
+}
+
 export async function POST(request: NextRequest) {
+  const ip = getClientIp(request);
+  const { success } = await rateLimit(ip, 3, 15 * 60 * 1000); // 3 requests per 15 minutes
+  if (!success) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
   const { email } = await request.json()
 
   if (!email) {
