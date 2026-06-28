@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { z } from "zod";
+
+const coAuthorSchema = z.object({
+  name: z.string().min(1).max(200),
+  email: z.string().email().optional(),
+  affiliation: z.string().max(500).optional(),
+  orcidId: z.string().max(50).optional(),
+});
 
 export async function GET(
   request: Request,
@@ -21,6 +30,12 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 20, 60 * 1000);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -34,21 +49,17 @@ export async function POST(
     }
 
     const body = await request.json();
-    const { name, email, affiliation, orcidId } = body;
-
-    if (!name) {
-      return NextResponse.json({ error: "Name is required" }, { status: 400 });
-    }
+    const data = coAuthorSchema.parse(body);
 
     const count = await db.coAuthor.count({ where: { paperId: id } });
 
     const coAuthor = await db.coAuthor.create({
       data: {
         paperId: id,
-        name,
-        email,
-        affiliation,
-        orcidId,
+        name: data.name,
+        email: data.email,
+        affiliation: data.affiliation,
+        orcidId: data.orcidId,
         order: count + 1,
       },
     });

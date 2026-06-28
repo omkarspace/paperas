@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 import { notifyReviewSubmitted } from "@/lib/services/notifications";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
 import { z } from "zod";
 
 const reviewSchema = z.object({
@@ -30,6 +31,12 @@ export async function GET(_request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 10, 60 * 1000);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

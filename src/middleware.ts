@@ -10,12 +10,25 @@ export default auth((req) => {
   const isAdmin = nextUrl.pathname.startsWith("/admin");
   const isReviewer = nextUrl.pathname.startsWith("/reviewer");
 
+  // API route protection
+  const isApiAdmin = nextUrl.pathname.startsWith("/api/admin");
+
   if (isAuthRoute && isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard", nextUrl));
   }
 
   if (isDashboard && !isLoggedIn) {
     return NextResponse.redirect(new URL("/auth/login", nextUrl));
+  }
+
+  if (isApiAdmin) {
+    if (!isLoggedIn) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (req.auth?.user?.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    return NextResponse.next();
   }
 
   if (isAdmin && (!isLoggedIn || req.auth?.user?.role !== "ADMIN")) {

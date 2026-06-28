@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server'
 import { searchPapers } from '@/lib/services/typesense'
 import { db } from '@/lib/db'
+import { rateLimit, getClientIp } from '@/lib/utils/rate-limit'
 
 export async function GET(request: Request) {
+  const ip = getClientIp(request);
+  const { success } = await rateLimit(ip, 30, 60 * 1000);
+  if (!success) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const { searchParams } = new URL(request.url)
   const q = searchParams.get('q') || ''
   const page = Number(searchParams.get('page')) || 1

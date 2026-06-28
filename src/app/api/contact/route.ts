@@ -1,8 +1,23 @@
 import { NextResponse } from "next/server";
-import { rateLimit } from "@/lib/utils/rate-limit";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { z } from "zod";
 
-function getClientIp(request: Request): string {
-  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
+const contactSchema = z.object({
+  name: z.string().min(1).max(200),
+  email: z.string().email(),
+  subject: z.string().min(1).max(500),
+  message: z.string().min(10).max(5000),
+});
+
+function checkOrigin(request: Request): boolean {
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (!origin || !host) return false;
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
 }
 
 export async function POST(request: Request) {
@@ -13,14 +28,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
 
-    const { name, email, subject, message } = await request.json();
-
-    if (!name || !email || !subject || !message) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    if (!checkOrigin(request)) {
+      return NextResponse.json({ error: "Invalid origin" }, { status: 403 });
     }
 
+    const body = await request.json();
+    const data = contactSchema.parse(body);
+
     return NextResponse.json({ message: "Message received. We'll get back to you soon." });
-  } catch {
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
+    }
     return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
   }
 }

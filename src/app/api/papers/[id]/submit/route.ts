@@ -2,12 +2,19 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 import { notifyPaperSubmitted } from "@/lib/services/notifications";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 5, 60 * 1000);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

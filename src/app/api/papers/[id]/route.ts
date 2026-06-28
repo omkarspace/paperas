@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { z } from "zod";
+
+const patchSchema = z.object({
+  title: z.string().min(1).max(200).optional(),
+  abstract: z.string().min(150).max(5000).optional(),
+  keywords: z.string().min(3).max(200).optional(),
+  categoryId: z.string().uuid().optional(),
+  status: z.enum(["DRAFT", "SUBMITTED"]).optional(),
+});
 
 export async function GET(
   request: Request,
@@ -35,6 +45,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 20, 60 * 1000);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -42,6 +58,7 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
+    const data = patchSchema.parse(body);
 
     const paper = await db.paper.findUnique({ where: { id } });
     if (!paper || paper.authorId !== session.user.id) {
@@ -51,14 +68,18 @@ export async function PATCH(
     const updated = await db.paper.update({
       where: { id },
       data: {
-        ...(body.title && { title: body.title }),
-        ...(body.abstract && { abstract: body.abstract }),
-        ...(body.keywords && { keywords: body.keywords }),
+        ...(data.title !== undefined && { title: data.title }),
+        ...(data.abstract !== undefined && { abstract: data.abstract }),
+        ...(data.keywords !== undefined && { keywords: data.keywords }),
+        ...(data.categoryId !== undefined && { categoryId: data.categoryId }),
       },
     });
 
     return NextResponse.json(updated);
-  } catch (_error) {
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
+    }
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }

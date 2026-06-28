@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
 import { generatePaperId } from "@/lib/utils/utils";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
 import { PaperStatus } from "@prisma/client";
 import { z } from "zod";
 
@@ -9,11 +10,17 @@ const paperSchema = z.object({
   title: z.string().min(1).max(200),
   abstract: z.string().min(150).max(5000),
   keywords: z.string().min(3).max(200),
-  categoryId: z.string().optional(),
+  categoryId: z.string().uuid().optional(),
 });
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 10, 60 * 1000);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

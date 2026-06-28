@@ -1,12 +1,25 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { z } from "zod";
+
+const revisionSchema = z.object({
+  pdfUrl: z.string().url().optional(),
+  comments: z.string().max(5000).optional(),
+});
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 5, 60 * 1000);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -14,6 +27,7 @@ export async function POST(
 
     const { id } = await params;
     const body = await request.json().catch(() => ({}));
+    const data = revisionSchema.parse(body);
 
     const paper = await db.paper.findUnique({ where: { id } });
     if (!paper || paper.authorId !== session.user.id) {
@@ -32,8 +46,8 @@ export async function POST(
       data: {
         paperId: id,
         revisionNumber: (paper.revisionCount || 0) + 1,
-        authorComments: body.comments || null,
-        pdfUrl: body.pdfUrl || paper.pdfUrl || null,
+        authorComments: data.comments || null,
+        pdfUrl: data.pdfUrl || paper.pdfUrl || null,
       },
     }).catch(() => {
       // Revision model may not exist yet - continue without it

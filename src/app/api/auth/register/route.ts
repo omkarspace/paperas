@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { rateLimit } from "@/lib/utils/rate-limit";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 
@@ -9,18 +9,30 @@ const registerSchema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   institution: z.string().optional(),
+  role: z.enum(["AUTHOR", "REVIEWER"]).optional(),
 });
 
-function getClientIp(request: Request): string {
-  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
+function checkOrigin(request: Request): boolean {
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (!origin || !host) return false;
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
 }
 
 export async function POST(request: Request) {
   try {
     const ip = getClientIp(request);
-    const { success } = await rateLimit(ip, 5, 60 * 1000); // 5 registrations per minute
+    const { success } = await rateLimit(ip, 5, 60 * 1000);
     if (!success) {
       return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    }
+
+    if (!checkOrigin(request)) {
+      return NextResponse.json({ error: "Invalid origin" }, { status: 403 });
     }
 
     const body = await request.json();
