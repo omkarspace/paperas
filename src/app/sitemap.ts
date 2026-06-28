@@ -18,43 +18,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/search/advanced`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.6 },
   ]
 
-  const papers = await db.paper.findMany({
-    where: { status: "PUBLISHED" },
-    select: { paperId: true, updatedAt: true },
-  })
+  try {
+    const papers = await db.paper.findMany({
+      where: { status: "PUBLISHED" },
+      select: { paperId: true, updatedAt: true },
+    })
 
-  const paperPages = papers.map((paper) => ({
-    url: `${baseUrl}/research/${paper.paperId}`,
-    lastModified: paper.updatedAt,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }))
+    const paperPages = papers.map((paper) => ({
+      url: `${baseUrl}/research/${paper.paperId}`,
+      lastModified: paper.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }))
 
-  const journalIssues = await db.journalIssue.findMany({
-    select: { volume: true, issue: true, updatedAt: true },
-    orderBy: [{ volume: "desc" }, { issue: "desc" }],
-  })
+    const journalIssues = await db.journalIssue.findMany({
+      select: { volume: true, issue: true, updatedAt: true },
+      orderBy: [{ volume: "desc" }, { issue: "desc" }],
+    })
 
-  const uniqueVolumes = new Map<number, Date>()
-  journalIssues.forEach((ji) => {
-    if (!uniqueVolumes.has(ji.volume) || ji.updatedAt > uniqueVolumes.get(ji.volume)!) {
-      uniqueVolumes.set(ji.volume, ji.updatedAt)
-    }
-  })
+    const uniqueVolumes = new Map<number, Date>()
+    journalIssues.forEach((ji) => {
+      if (!uniqueVolumes.has(ji.volume) || ji.updatedAt > uniqueVolumes.get(ji.volume)!) {
+        uniqueVolumes.set(ji.volume, ji.updatedAt)
+      }
+    })
 
-  const volumePages = Array.from(uniqueVolumes.entries()).map(([volume, updatedAt]) => ({
-    url: `${baseUrl}/journal/${volume}`,
-    lastModified: updatedAt,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }))
+    const volumePages = Array.from(uniqueVolumes.entries()).map(([volume, updatedAt]) => ({
+      url: `${baseUrl}/journal/${volume}`,
+      lastModified: updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }))
 
-  const issuePages = journalIssues.map((ji) => ({
-    url: `${baseUrl}/journal/${ji.volume}/${ji.issue}`,
-    lastModified: ji.updatedAt,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }))
+    const issuePages = journalIssues.map((ji) => ({
+      url: `${baseUrl}/journal/${ji.volume}/${ji.issue}`,
+      lastModified: ji.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }))
 
-  return [...staticPages, ...paperPages, ...volumePages, ...issuePages]
+    return [...staticPages, ...paperPages, ...volumePages, ...issuePages]
+  } catch {
+    return staticPages
+  }
 }

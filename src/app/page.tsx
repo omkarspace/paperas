@@ -3,6 +3,8 @@ import { Navbar } from "@/components/shared/navbar";
 import { HeroSection } from "@/components/home/hero-section";
 import { StatsSection } from "@/components/home/stats-section";
 import { PublicationsSection } from "@/components/home/publications-section";
+
+export const dynamic = "force-dynamic";
 import { FeaturesSection } from "@/components/home/features-section";
 import { EditorialPreviewSection } from "@/components/home/editorial-preview-section";
 import { TrustBadgesSection } from "@/components/home/trust-badges-section";
