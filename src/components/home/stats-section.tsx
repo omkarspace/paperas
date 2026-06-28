@@ -2,12 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const stats = [
-  { label: "Papers Published", value: 2500, suffix: "+" },
-  { label: "Active Reviewers", value: 150, suffix: "+" },
-  { label: "Citations", value: 12000, suffix: "+" },
-  { label: "Countries", value: 45, suffix: "" },
-];
+interface StatItem {
+  label: string;
+  value: number;
+  suffix: string;
+}
 
 function useCountUp(end: number, duration: number = 2000) {
   const [count, setCount] = useState(0);
@@ -40,7 +39,7 @@ function useCountUp(end: number, duration: number = 2000) {
   return { count, ref };
 }
 
-function StatCard({ label, value, suffix }: { label: string; value: number; suffix: string }) {
+function StatCard({ label, value, suffix }: StatItem) {
   const { count, ref } = useCountUp(value);
 
   return (
@@ -53,7 +52,11 @@ function StatCard({ label, value, suffix }: { label: string; value: number; suff
   );
 }
 
-export function StatsSection() {
+interface StatsSectionProps {
+  stats: StatItem[];
+}
+
+export function StatsSection({ stats }: StatsSectionProps) {
   return (
     <section className="border-y border-border bg-muted/30 py-12">
       <div className="container mx-auto max-w-7xl px-4 md:px-6">
