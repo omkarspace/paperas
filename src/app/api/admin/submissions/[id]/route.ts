@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 import { PaperStatus } from "@prisma/client";
+import { notifyDecisionMade } from "@/lib/services/notifications";
 
 export async function PATCH(
   request: Request,
@@ -35,6 +36,22 @@ export async function PATCH(
         ...(status === "PUBLISHED" && { publicationDate: new Date() }),
       },
     });
+
+    // Notify the author when a decision is made
+    const decisionStatuses = ["ACCEPTED", "REJECTED", "REVISION_REQUESTED"] as const;
+    if (decisionStatuses.includes(status as typeof decisionStatuses[number])) {
+      const fullPaper = await db.paper.findUnique({
+        where: { id },
+        select: { title: true, authorId: true },
+      });
+      if (fullPaper) {
+        await notifyDecisionMade(
+          fullPaper.authorId,
+          fullPaper.title,
+          status as "ACCEPTED" | "REJECTED" | "REVISION_REQUESTED"
+        ).catch(() => {});
+      }
+    }
 
     return NextResponse.json(paper);
   } catch (_error) {

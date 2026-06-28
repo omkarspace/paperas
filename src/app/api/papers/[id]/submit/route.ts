@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
+import { notifyPaperSubmitted } from "@/lib/services/notifications";
 
 export async function POST(
   request: Request,
@@ -30,6 +31,9 @@ export async function POST(
         submissionDate: new Date(),
       },
     });
+
+    // Notify author + admins
+    await notifyPaperSubmitted(id, session.user.id, paper.title).catch(() => {});
 
     return NextResponse.json(updated);
   } catch (_error) {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from '@/lib/auth/auth';
+import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
+import { notifyReviewSubmitted } from "@/lib/services/notifications";
 import { z } from "zod";
 
 const reviewSchema = z.object({
@@ -70,6 +71,13 @@ export async function POST(request: Request) {
         qualityRating: data.qualityRating,
       },
     });
+
+    // Notify admins/editors that a review was submitted
+    const paper = await db.paper.findUnique({ where: { id: data.paperId }, select: { title: true } });
+    const reviewer = await db.user.findUnique({ where: { id: session.user.id }, select: { name: true } });
+    if (paper && reviewer) {
+      await notifyReviewSubmitted(data.paperId, paper.title, reviewer.name || "Reviewer").catch(() => {});
+    }
 
     return NextResponse.json(review, { status: 201 });
   } catch (error) {

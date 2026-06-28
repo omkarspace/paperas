@@ -98,6 +98,7 @@ model Paper {
   publicationDate   DateTime?
   volume            Int?
   issue             Int?
+  revisionCount     Int          @default(0)
   categoryId        String?
   authorId          String
   createdAt         DateTime     @default(now())
@@ -107,6 +108,7 @@ model Paper {
   category  Category?    @relation(fields: [categoryId], references: [id])
   reviews         Review[]
   coAuthors       CoAuthor[]
+  revisions       Revision[]
   paperAnalytics PaperAnalytics?
 }
 
@@ -125,6 +127,19 @@ model CoAuthor {
   user  User?  @relation(fields: [userId], references: [id])
 
   @@unique([paperId, email])
+  @@index([paperId])
+}
+
+model Revision {
+  id              String   @id @default(cuid())
+  paperId         String
+  revisionNumber  Int
+  authorComments  String?
+  pdfUrl          String?
+  createdAt       DateTime @default(now())
+
+  paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
   @@index([paperId])
 }
 

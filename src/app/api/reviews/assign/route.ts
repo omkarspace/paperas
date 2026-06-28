@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
+import { notifyReviewerAssigned } from "@/lib/services/notifications";
 
 export async function POST(request: Request) {
   try {
@@ -36,6 +37,12 @@ export async function POST(request: Request) {
       where: { id: paperId },
       data: { status: "UNDER_REVIEW" },
     });
+
+    // Notify the reviewer
+    const paper = await db.paper.findUnique({ where: { id: paperId }, select: { title: true } });
+    if (paper) {
+      await notifyReviewerAssigned(reviewerId, paperId, paper.title).catch(() => {});
+    }
 
     return NextResponse.json(review, { status: 201 });
   } catch (error) {
