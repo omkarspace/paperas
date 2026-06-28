@@ -11,6 +11,8 @@ import {
   Users,
   Tag,
   BarChart3,
+  BookOpen,
+  BookMarked,
 } from "lucide-react";
 import {
   Sidebar,
@@ -46,6 +48,8 @@ const adminNav: NavItem[] = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Users", href: "/admin/users", icon: Users },
   { title: "Submissions", href: "/admin/submissions", icon: FileText },
+  { title: "Issues", href: "/admin/issues", icon: BookOpen },
+  { title: "Editorial Board", href: "/admin/editorial-board", icon: BookMarked },
   { title: "Categories", href: "/admin/categories", icon: Tag },
   { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { title: "Settings", href: "/admin/settings", icon: Settings },

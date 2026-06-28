@@ -6,6 +6,31 @@ import { Input } from "@/components/ui/input";
 
 export function NewsletterSection() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+      setMessage(data.message || "Subscribed successfully!");
+      setEmail("");
+    } catch {
+      setMessage("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <section className="py-20 bg-muted/30">
@@ -15,23 +40,28 @@ export function NewsletterSection() {
             Stay Updated
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Join 5,000+ researchers receiving the latest publications and academic insights.
+            Receive the latest publications and academic insights.
           </p>
-          <form className="mt-8 flex gap-3">
+          <form onSubmit={handleSubmit} className="mt-8 flex gap-3">
             <Input
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1"
+              required
             />
             <Button
               type="submit"
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              disabled={loading}
             >
-              Subscribe
+              {loading ? "..." : "Subscribe"}
             </Button>
           </form>
+          {message && (
+            <p className="mt-3 text-sm text-muted-foreground">{message}</p>
+          )}
         </div>
       </div>
     </section>

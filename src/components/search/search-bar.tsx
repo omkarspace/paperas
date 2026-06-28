@@ -8,16 +8,23 @@ import { Search } from "lucide-react";
 
 interface SearchBarProps {
   initialQuery?: string;
+  onSearch?: (query: string) => void;
+  placeholder?: string;
 }
 
-export function SearchBar({ initialQuery = "" }: SearchBarProps) {
+export function SearchBar({ initialQuery = "", onSearch, placeholder = "Search papers..." }: SearchBarProps) {
   const [query, setQuery] = useState(initialQuery);
   const router = useRouter();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (query.trim()) {
-      router.push(`/research?q=${encodeURIComponent(query.trim())}`);
+    const q = query.trim();
+    if (!q) return;
+
+    if (onSearch) {
+      onSearch(q);
+    } else {
+      router.push(`/research?q=${encodeURIComponent(q)}`);
     }
   }
 
@@ -27,7 +34,7 @@ export function SearchBar({ initialQuery = "" }: SearchBarProps) {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search papers..."
+        placeholder={placeholder}
         className="flex-1"
       />
       <Button type="submit" size="icon">

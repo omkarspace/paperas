@@ -24,7 +24,7 @@ export async function generateJATS(paperId: string) {
       <journal-title-group>
         <journal-title>Paperas</journal-title>
       </journal-title-group>
-      <issn>PAP-${year}-0001</issn>
+      <issn>RVJ-${year}-0001</issn>
     </journal-meta>
     <article-meta>
       <article-id pub-id-type="doi">${paper.doi || `10.xxxx/paperas-${paper.paperId.toLowerCase()}`}</article-id>

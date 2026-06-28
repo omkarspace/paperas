@@ -19,20 +19,20 @@ export default async function SubmissionsPage() {
   });
 
   const statusColors: Record<string, string> = {
-    DRAFT: "bg-gray-500",
-    SUBMITTED: "bg-blue-500",
-    UNDER_REVIEW: "bg-yellow-500",
-    REVISION_REQUESTED: "bg-amber-500",
-    ACCEPTED: "bg-green-500",
-    PUBLISHED: "bg-primary",
-    REJECTED: "bg-red-500",
+    DRAFT: "bg-muted text-muted-foreground border-border",
+    SUBMITTED: "bg-blue-50 text-blue-700 border-blue-200",
+    UNDER_REVIEW: "bg-amber-50 text-amber-700 border-amber-200",
+    REVISION_REQUESTED: "bg-orange-50 text-orange-700 border-orange-200",
+    ACCEPTED: "bg-green-50 text-green-700 border-green-200",
+    PUBLISHED: "bg-purple-50 text-purple-700 border-purple-200",
+    REJECTED: "bg-red-50 text-red-700 border-red-200",
   };
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-serif font-bold text-2xl">My Submissions</h2>
-        <Link href="/dashboard/submit">
+        <Link href="/papers/submit">
           <Button>New Submission</Button>
         </Link>
       </div>
@@ -73,7 +73,7 @@ export default async function SubmissionsPage() {
       ) : (
         <div className="text-center py-12 text-muted-foreground">
           <p>No submissions yet.</p>
-          <Link href="/dashboard/submit">
+          <Link href="/papers/submit">
             <Button className="mt-4">Submit Your First Paper</Button>
           </Link>
         </div>

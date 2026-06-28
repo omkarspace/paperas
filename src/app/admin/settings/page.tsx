@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,7 +57,7 @@ export default function AdminSettingsPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="issn">ISSN</Label>
-                <Input id="issn" name="issn" defaultValue="PAP-2026-0001" />
+                <Input id="issn" name="issn" defaultValue="RVJ-2026-0001" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="doiPrefix">DOI Prefix</Label>
@@ -84,7 +85,9 @@ export default function AdminSettingsPage() {
           <CardDescription>Manage paper categories</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Category management coming soon.</p>
+          <Button variant="outline" asChild>
+            <Link href="/admin/categories">Manage Categories</Link>
+          </Button>
         </CardContent>
       </Card>
 
