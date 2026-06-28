@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from '@/lib/auth/auth'
 import { db } from "@/lib/db"
-import { uploadPDF, generateS3Key } from "@/lib/storage/s3"
+import { uploadPDF, generateS3Key } from "@/lib/storage"
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit"
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024

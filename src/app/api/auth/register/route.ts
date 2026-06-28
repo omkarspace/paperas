@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
 import bcrypt from "bcryptjs";
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
     const ip = getClientIp(request);
     const { success } = await rateLimit(ip, 5, 60 * 1000);
     if (!success) {
-      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
 
     if (!checkOrigin(request)) {
@@ -38,43 +39,50 @@ export async function POST(request: Request) {
     const body = await request.json();
     const data = registerSchema.parse(body);
 
-    const existingUser = await db.user.findUnique({
-      where: { email: data.email },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "Email already registered" },
-        { status: 400 }
-      );
-    }
-
-    const hashedPassword = await bcrypt.hash(data.password, 12);
-
-    const user = await db.user.create({
-      data: {
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-        institution: data.institution,
-        role: "AUTHOR",
+    // Create user in Supabase Auth
+    const supabase = await createClient();
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: {
+          name: data.name,
+          institution: data.institution,
+          role: data.role || "AUTHOR",
+        },
       },
     });
 
-    return NextResponse.json(
-      { message: "Account created successfully", userId: user.id },
-      { status: 201 }
-    );
+    if (authError) {
+      return NextResponse.json({ error: authError.message }, { status: 400 });
+    }
+
+    if (!authData.user) {
+      return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+    }
+
+    // Create user in our database
+    const hashedPassword = await bcrypt.hash(data.password, 12);
+
+    await db.user.create({
+      data: {
+        id: authData.user.id,
+        email: data.email,
+        name: data.name,
+        password: hashedPassword,
+        institution: data.institution || null,
+        role: data.role || "AUTHOR",
+      },
+    });
+
+    return NextResponse.json({
+      message: "Account created. Please check your email to verify.",
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: error.errors[0].message },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
     }
-    return NextResponse.json(
-      { error: "Registration failed" },
-      { status: 500 }
-    );
+    console.error("Registration error:", error);
+    return NextResponse.json({ error: "Registration failed" }, { status: 500 });
   }
 }

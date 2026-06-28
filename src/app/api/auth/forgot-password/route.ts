@@ -1,8 +1,6 @@
-import { NextResponse } from "next/server"
-import crypto from "crypto"
-import { db } from "@/lib/db"
-import { rateLimit, getClientIp } from "@/lib/utils/rate-limit"
-import { sendPasswordResetEmail } from '@/lib/services/email'
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
 
 function checkOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
@@ -19,31 +17,26 @@ export async function POST(request: Request) {
   const ip = getClientIp(request);
   const { success } = await rateLimit(ip, 3, 15 * 60 * 1000);
   if (!success) {
-    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
   if (!checkOrigin(request)) {
     return NextResponse.json({ error: "Invalid origin" }, { status: 403 });
   }
 
-  const { email } = await request.json()
+  const { email } = await request.json();
 
   if (!email || typeof email !== "string") {
-    return NextResponse.json({ error: "Email is required" }, { status: 400 })
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
 
-  const user = await db.user.findUnique({ where: { email } })
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/auth/reset-password`,
+  });
 
-  if (user) {
-    const token = crypto.randomBytes(32).toString("hex")
-    const expiresAt = new Date(Date.now() + 3600000)
-
-    await db.passwordResetToken.create({
-      data: { email, token, expiresAt },
-    })
-
-    await sendPasswordResetEmail(email, token)
-  }
-
-  return NextResponse.json({ message: "If an account exists, a reset link has been sent." })
+  // Always return success to prevent email enumeration
+  return NextResponse.json({
+    message: "If an account exists, a reset link has been sent.",
+  });
 }

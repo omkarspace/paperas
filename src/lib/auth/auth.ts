@@ -1,112 +1,61 @@
-import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import Credentials from "next-auth/providers/credentials";
-import Google from "next-auth/providers/google";
-
+import { createClient } from "@/lib/supabase/server";
 import { db } from "../db";
 import { UserRole } from "@prisma/client";
-import bcrypt from "bcryptjs";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
-  pages: {
-    signIn: "/auth/login",
-  },
-  providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-    {
-      id: "orcid",
-      name: "ORCID",
-      type: "oauth",
-      authorization: {
-        url: "https://orcid.org/oauth/authorize",
-        params: { scope: "/authenticate" },
+export interface SessionUser {
+  id: string;
+  email: string;
+  name: string | null;
+  role: UserRole;
+  image: string | null;
+}
+
+export interface Session {
+  user: SessionUser;
+}
+
+/**
+ * Get the current session by reading the Supabase auth cookie
+ * and looking up the user's role from the database.
+ * Returns null if not authenticated.
+ */
+export async function auth(): Promise<Session | null> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) return null;
+
+    // Look up our app user by Supabase auth ID
+    const appUser = await db.user.findUnique({
+      where: { id: user.id },
+      select: { id: true, email: true, name: true, role: true, image: true },
+    });
+
+    if (!appUser) return null;
+
+    return {
+      user: {
+        id: appUser.id,
+        email: appUser.email,
+        name: appUser.name,
+        role: appUser.role,
+        image: appUser.image,
       },
-      token: "https://orcid.org/oauth/token",
-      userinfo: {
-        url: "https://pub.orcid.org/v3.0/",
-        request: async ({ tokens }: { tokens: Record<string, unknown> }) => {
-          const orcid = tokens.id_token || (tokens as Record<string, unknown>)?.orcid
-          const res = await fetch(`https://pub.orcid.org/v3.0/${orcid}/record`, {
-            headers: { Authorization: `Bearer ${tokens.access_token}` },
-          })
-          const data = await res.json()
-          const name = data?.person?.name
-          return {
-            id: orcid,
-            name: name ? `${name["given-names"]?.value || ""} ${name["family-name"]?.value || ""}`.trim() : null,
-            email: null,
-            image: null,
-          }
-        },
-      },
-      clientId: process.env.ORCID_CLIENT_ID,
-      clientSecret: process.env.ORCID_CLIENT_SECRET,
-      profile(profile) {
-        return {
-          id: profile.id,
-          name: profile.name,
-          email: profile.email,
-          image: profile.image,
-        }
-      },
-    },
-    Credentials({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+    };
+  } catch {
+    return null;
+  }
+}
 
-        const user = await db.user.findUnique({
-          where: { email: credentials.email as string },
-        });
-
-        if (!user || !user.password) {
-          return null;
-        }
-
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.password
-        );
-
-        if (!isValid) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          image: user.image,
-        };
-      },
-    }),
-  ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = (user as { role: UserRole }).role;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as UserRole;
-      }
-      return session;
-    },
-  },
-});
+/**
+ * Require authentication - throws redirect if not authenticated.
+ * For use in server components.
+ */
+export async function requireAuth(): Promise<Session> {
+  const session = await auth();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+  return session;
+}

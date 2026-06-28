@@ -1,2 +1,2 @@
-export { auth, handlers, signIn, signOut } from "./auth"
-export type { Session } from "next-auth"
+export { auth, requireAuth } from "./auth"
+export type { Session, SessionUser } from "./auth"

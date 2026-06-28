@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
+import { createClient } from "@/lib/supabase/server"
 import { db } from "@/lib/db"
+import bcrypt from "bcryptjs"
 
 export async function POST(request: NextRequest) {
   const { token, password } = await request.json()
@@ -13,20 +14,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 })
   }
 
-  const resetToken = await db.passwordResetToken.findUnique({ where: { token } })
+  const supabase = await createClient()
 
-  if (!resetToken || resetToken.expiresAt < new Date()) {
-    return NextResponse.json({ error: "Invalid or expired token" }, { status: 400 })
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 12)
-
-  await db.user.update({
-    where: { email: resetToken.email },
-    data: { password: hashedPassword },
+  // Use Supabase to verify the recovery token and update password
+  const { error } = await supabase.auth.updateUser({
+    password,
   })
 
-  await db.passwordResetToken.delete({ where: { id: resetToken.id } })
+  if (error) {
+    return NextResponse.json({ error: "Invalid or expired reset link" }, { status: 400 })
+  }
+
+  // Also update the password in our local DB for the auth() helper
+  const { data: { user } } = await supabase.auth.getUser()
+  if (user) {
+    const hashedPassword = await bcrypt.hash(password, 12)
+    await db.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    }).catch(() => {})
+  }
 
   return NextResponse.json({ message: "Password reset successfully." })
 }
