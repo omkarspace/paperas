@@ -30,14 +30,14 @@ export function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
               <BookOpen className="h-6 w-6 text-secondary" />
-              <span className="font-serif text-xl font-bold">Research Verse</span>
+              <span className="font-serif text-xl font-bold">Paperas</span>
             </Link>
             <p className="text-sm text-primary-foreground/70">
               A peer-reviewed journal committed to open access, rigorous review, and scholarly excellence.
             </p>
             <div className="flex gap-4 text-primary-foreground/70">
               <Mail className="h-4 w-4" />
-              <span className="text-sm">editor@researchverse.in</span>
+              <span className="text-sm">editor@paperas.in</span>
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 border-t border-primary-foreground/20 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-primary-foreground/50">
-            &copy; {new Date().getFullYear()} Research Verse Journal And Publication House Of India. All rights reserved.
+            &copy; {new Date().getFullYear()} Paperas Journal And Publication House Of India. All rights reserved.
           </p>
           <div className="flex gap-4 text-xs text-primary-foreground/50">
             <Link href="/privacy" className="hover:text-secondary transition-colors">Privacy Policy</Link>

@@ -26,7 +26,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-primary" />
           <span className="font-serif text-xl font-bold text-primary">
-            Research Verse
+            Paperas
           </span>
         </Link>
 

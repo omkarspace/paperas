@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Target, Users, Award } from "lucide-react";
 
 const milestones = [
-  { year: "2020", event: "Research Verse founded" },
+  { year: "2020", event: "Paperas founded" },
   { year: "2021", event: "First issue published" },
   { year: "2023", event: "Indexed in Scopus" },
   { year: "2025", event: "Impact Factor achieved" },
@@ -24,7 +24,7 @@ export default function AboutPage() {
         {/* Hero */}
         <section className="bg-primary py-20">
           <div className="container mx-auto max-w-7xl px-4 md:px-6 text-center">
-            <h1 className="font-serif text-4xl font-bold text-primary-foreground">About Research Verse</h1>
+            <h1 className="font-serif text-4xl font-bold text-primary-foreground">About Paperas</h1>
             <p className="mt-4 text-primary-foreground/80 max-w-2xl mx-auto">
               Advancing scholarly communication through rigorous peer review and open access publishing.
             </p>
@@ -38,7 +38,7 @@ export default function AboutPage() {
               <div>
                 <h2 className="font-serif text-3xl font-semibold text-primary mb-4">Our Mission</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Research Verse is committed to advancing research in India and beyond. We provide a platform for
+                  Paperas is committed to advancing research in India and beyond. We provide a platform for
                   high-quality, peer-reviewed publications across all academic disciplines. Our goal is to make
                   scholarly research accessible, transparent, and impactful.
                 </p>

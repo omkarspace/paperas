@@ -14,7 +14,7 @@ export default function LoginPage() {
             <BookOpen className="h-10 w-10 text-primary" />
           </Link>
           <CardTitle className="font-serif text-2xl">Welcome Back</CardTitle>
-          <CardDescription>Sign in to your Research Verse account</CardDescription>
+          <CardDescription>Sign in to your Paperas account</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-4">

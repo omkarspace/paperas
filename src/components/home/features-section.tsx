@@ -28,7 +28,7 @@ export function FeaturesSection() {
             Journal Highlights
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Research Verse provides a platform for high-quality academic publishing
+            Paperas provides a platform for high-quality academic publishing
           </p>
         </div>
 

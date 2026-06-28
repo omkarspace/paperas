@@ -70,7 +70,7 @@ export function SidebarNav() {
         <Link href="/" className="flex items-center gap-2 px-2 py-1">
           <span className="font-serif text-lg font-bold text-primary">RV</span>
           <span className="text-sm text-muted-foreground hidden group-data-[collapsible=icon]:hidden">
-            Research Verse
+            Paperas
           </span>
         </Link>
       </SidebarHeader>

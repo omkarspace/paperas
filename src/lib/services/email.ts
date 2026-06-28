@@ -15,7 +15,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
   }
 
   await resend.emails.send({
-    from: process.env.EMAIL_FROM || "Research Verse <noreply@researchverse.in>",
+    from: process.env.EMAIL_FROM || "Paperas <noreply@paperas.in>",
     to,
     subject,
     html,
@@ -28,16 +28,16 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 
   await sendEmail({
     to: email,
-    subject: "Reset your Research Verse password",
+    subject: "Reset your Paperas password",
     html: `
       <div style="font-family: 'Source Sans 3', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1e3a5f; font-family: 'Libre Baskerville', serif;">Password Reset</h1>
-        <p>We received a request to reset your password for your Research Verse account.</p>
+        <p>We received a request to reset your password for your Paperas account.</p>
         <p>Click the button below to set a new password. This link expires in 1 hour.</p>
         <a href="${resetUrl}" style="display: inline-block; background-color: #d4a843; color: #1e3a5f; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; margin: 16px 0;">Reset Password</a>
         <p style="color: #666; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
-        <p style="color: #94a3b8; font-size: 12px;">Research Verse — Advancing Research in India</p>
+        <p style="color: #94a3b8; font-size: 12px;">Paperas — Advancing Research in India</p>
       </div>
     `,
   })
@@ -52,7 +52,7 @@ export async function sendSubmissionConfirmation(email: string, paperTitle: stri
     html: `
       <div style="font-family: 'Source Sans 3', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1e3a5f; font-family: 'Libre Baskerville', serif;">Submission Received</h1>
-        <p>Thank you for submitting your paper to Research Verse.</p>
+        <p>Thank you for submitting your paper to Paperas.</p>
         <div style="background-color: #f8fafc; border-left: 4px solid #d4a843; padding: 16px; margin: 16px 0;">
           <p style="margin: 0; font-weight: 600;">${paperTitle}</p>
           <p style="margin: 4px 0 0 0; color: #666; font-size: 14px;">Paper ID: ${paperId}</p>
@@ -60,7 +60,7 @@ export async function sendSubmissionConfirmation(email: string, paperTitle: stri
         <p>Your paper is now under editorial review. You will receive an email when it moves to the next stage.</p>
         <a href="${baseUrl}/dashboard/submissions" style="display: inline-block; background-color: #1e3a5f; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; margin: 16px 0;">View Submissions</a>
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
-        <p style="color: #94a3b8; font-size: 12px;">Research Verse — Advancing Research in India</p>
+        <p style="color: #94a3b8; font-size: 12px;">Paperas — Advancing Research in India</p>
       </div>
     `,
   })
@@ -76,7 +76,7 @@ export async function sendReviewAssignedEmail(email: string, reviewerName: strin
       <div style="font-family: 'Source Sans 3', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1e3a5f; font-family: 'Libre Baskerville', serif;">Review Assignment</h1>
         <p>Dear ${reviewerName},</p>
-        <p>You have been assigned to review a paper for Research Verse.</p>
+        <p>You have been assigned to review a paper for Paperas.</p>
         <div style="background-color: #f8fafc; border-left: 4px solid #1e3a5f; padding: 16px; margin: 16px 0;">
           <p style="margin: 0; font-weight: 600;">${paperTitle}</p>
           <p style="margin: 4px 0 0 0; color: #666; font-size: 14px;">Paper ID: ${paperId}</p>
@@ -84,7 +84,7 @@ export async function sendReviewAssignedEmail(email: string, reviewerName: strin
         <p>Please complete your review within 4 weeks. You can access the paper through your reviewer dashboard.</p>
         <a href="${baseUrl}/reviewer" style="display: inline-block; background-color: #1e3a5f; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; margin: 16px 0;">Go to Reviewer Dashboard</a>
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
-        <p style="color: #94a3b8; font-size: 12px;">Research Verse — Advancing Research in India</p>
+        <p style="color: #94a3b8; font-size: 12px;">Paperas — Advancing Research in India</p>
       </div>
     `,
   })
@@ -119,7 +119,7 @@ export async function sendDecisionEmail(
         ${comments ? `<p><strong>Reviewer Comments:</strong></p><p style="color: #666; white-space: pre-wrap;">${comments}</p>` : ""}
         <a href="${baseUrl}/dashboard/submissions" style="display: inline-block; background-color: #1e3a5f; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; margin: 16px 0;">View Submissions</a>
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
-        <p style="color: #94a3b8; font-size: 12px;">Research Verse — Advancing Research in India</p>
+        <p style="color: #94a3b8; font-size: 12px;">Paperas — Advancing Research in India</p>
       </div>
     `,
   })
@@ -135,7 +135,7 @@ export async function sendNotificationEmail(email: string, title: string, messag
         <p>${message}</p>
         ${link ? `<a href="${link}" style="display: inline-block; background-color: #1e3a5f; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; margin: 16px 0;">View Details</a>` : ""}
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
-        <p style="color: #94a3b8; font-size: 12px;">Research Verse — Advancing Research in India</p>
+        <p style="color: #94a3b8; font-size: 12px;">Paperas — Advancing Research in India</p>
       </div>
     `,
   })

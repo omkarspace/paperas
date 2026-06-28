@@ -63,7 +63,7 @@ export default function ContactPage() {
                     <div>
                       <p className="font-medium">Address</p>
                       <p className="text-sm text-muted-foreground">
-                        Research Verse Journal And Publication House Of India<br />
+                        Paperas Journal And Publication House Of India<br />
                         New Delhi, India
                       </p>
                     </div>
@@ -74,7 +74,7 @@ export default function ContactPage() {
                     <Mail className="h-5 w-5 text-secondary mt-0.5" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-sm text-muted-foreground">editor@researchverse.in</p>
+                      <p className="text-sm text-muted-foreground">editor@paperas.in</p>
                     </div>
                   </CardContent>
                 </Card>

@@ -5,15 +5,15 @@ const prisma = new PrismaClient();
 
 const users = [
   {
-    email: "admin@researchverse.in",
+    email: "admin@paperas.in",
     password: "Admin@123",
     name: "Dr. Admin User",
     role: "ADMIN" as const,
-    institution: "Research Verse",
-    bio: "System administrator for Research Verse journal platform.",
+    institution: "Paperas",
+    bio: "System administrator for Paperas journal platform.",
   },
   {
-    email: "author@researchverse.in",
+    email: "author@paperas.in",
     password: "Author@123",
     name: "Dr. Priya Sharma",
     role: "AUTHOR" as const,
@@ -22,7 +22,7 @@ const users = [
     orcid: "0000-0001-2345-6789",
   },
   {
-    email: "reviewer@researchverse.in",
+    email: "reviewer@paperas.in",
     password: "Reviewer@123",
     name: "Dr. Rajesh Kumar",
     role: "REVIEWER" as const,
@@ -31,16 +31,16 @@ const users = [
     orcid: "0000-0002-3456-7890",
   },
   {
-    email: "editor@researchverse.in",
+    email: "editor@paperas.in",
     password: "Editor@123",
     name: "Dr. Ananya Patel",
     role: "EDITOR" as const,
     institution: "University of Mumbai",
-    bio: "Managing Editor at Research Verse, specializing in pharmacology.",
+    bio: "Managing Editor at Paperas, specializing in pharmacology.",
     orcid: "0000-0003-4567-8901",
   },
   {
-    email: "author2@researchverse.in",
+    email: "author2@paperas.in",
     password: "Author@123",
     name: "Dr. Amit Verma",
     role: "AUTHOR" as const,
@@ -48,7 +48,7 @@ const users = [
     bio: "Researcher in sustainable water resource management and IoT systems.",
   },
   {
-    email: "author3@researchverse.in",
+    email: "author3@paperas.in",
     password: "Author@123",
     name: "Dr. Sneha Reddy",
     role: "AUTHOR" as const,
@@ -249,12 +249,12 @@ async function main() {
 
   console.log("\n=== Seed Complete ===");
   console.log("\nTest Credentials:");
-  console.log("  Admin:    admin@researchverse.in / Admin@123");
-  console.log("  Author:   author@researchverse.in / Author@123");
-  console.log("  Reviewer: reviewer@researchverse.in / Reviewer@123");
-  console.log("  Editor:   editor@researchverse.in / Editor@123");
-  console.log("  Author 2: author2@researchverse.in / Author@123");
-  console.log("  Author 3: author3@researchverse.in / Author@123");
+  console.log("  Admin:    admin@paperas.in / Admin@123");
+  console.log("  Author:   author@paperas.in / Author@123");
+  console.log("  Reviewer: reviewer@paperas.in / Reviewer@123");
+  console.log("  Editor:   editor@paperas.in / Editor@123");
+  console.log("  Author 2: author2@paperas.in / Author@123");
+  console.log("  Author 3: author3@paperas.in / Author@123");
 }
 
 main()

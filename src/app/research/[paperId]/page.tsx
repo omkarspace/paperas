@@ -198,7 +198,7 @@ export default async function PaperDetailPage({
           dateModified: paper.updatedAt?.toISOString(),
           publisher: {
             "@type": "Organization",
-            name: "Research Verse Journal And Publication House Of India",
+            name: "Paperas Journal And Publication House Of India",
           },
           isPartOf: {
             "@type": "Periodical",

@@ -15,7 +15,7 @@ export default function RegisterPage() {
             <BookOpen className="h-10 w-10 text-primary" />
           </Link>
           <CardTitle className="font-serif text-2xl">Create Account</CardTitle>
-          <CardDescription>Join the Research Verse academic community</CardDescription>
+          <CardDescription>Join the Paperas academic community</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-4">
