@@ -34,25 +34,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid reviewer" }, { status: 400 });
     }
 
-    const existingReview = await db.review.findFirst({
-      where: { paperId: data.paperId, reviewerId: data.reviewerId },
-    });
-
-    if (existingReview) {
-      return NextResponse.json(
-        { error: "This reviewer is already assigned to this paper" },
-        { status: 409 }
-      );
+    let review;
+    try {
+      review = await db.review.create({
+        data: {
+          paperId: data.paperId,
+          reviewerId: data.reviewerId,
+          comments: "",
+          recommendation: "ACCEPT",
+        },
+      });
+    } catch (err: any) {
+      if (err?.code === "P2002") {
+        return NextResponse.json(
+          { error: "This reviewer is already assigned to this paper" },
+          { status: 409 }
+        );
+      }
+      throw err;
     }
-
-    const review = await db.review.create({
-      data: {
-        paperId: data.paperId,
-        reviewerId: data.reviewerId,
-        comments: "",
-        recommendation: "ACCEPT",
-      },
-    });
 
     await db.paper.update({
       where: { id: data.paperId },

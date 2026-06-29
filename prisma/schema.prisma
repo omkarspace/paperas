@@ -128,6 +128,8 @@ model Review {
 
   paper    Paper @relation(fields: [paperId], references: [id])
   reviewer User  @relation(fields: [reviewerId], references: [id])
+
+  @@unique([paperId, reviewerId])
 }
 
 model JournalIssue {
