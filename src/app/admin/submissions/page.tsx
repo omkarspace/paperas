@@ -6,6 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PaperStatus } from "@prisma/client";
 
+const PAGE_SIZE = 20;
+
+const VALID_STATUSES = new Set(Object.values(PaperStatus));
+
 export const dynamic = "force-dynamic";
 
 export default async function AdminSubmissionsPage({
@@ -18,22 +22,25 @@ export default async function AdminSubmissionsPage({
   if (!session || session.user.role !== "ADMIN") redirect("/");
 
   const page = Math.max(1, Number(params.page) || 1);
-  const status = params.status || undefined;
+  const statusParam = params.status || undefined;
+  const status = statusParam && VALID_STATUSES.has(statusParam as PaperStatus)
+    ? (statusParam as PaperStatus)
+    : undefined;
 
-  const where = status ? { status: status as PaperStatus } : {};
+  const where = status ? { status } : {};
 
   const [papers, total] = await Promise.all([
     db.paper.findMany({
       where,
       include: { author: true, category: true },
       orderBy: { createdAt: "desc" },
-      skip: (page - 1) * 20,
-      take: 20,
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
     }),
     db.paper.count({ where }),
   ]);
 
-  const totalPages = Math.ceil(total / 20);
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   const statusColors: Record<string, string> = {
     DRAFT: "bg-gray-500",
@@ -51,7 +58,7 @@ export default async function AdminSubmissionsPage({
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing {(page - 1) * 20 + 1}–{Math.min(page * 20, total)} of {total} papers
+          Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} of {total} papers
         </p>
         <div className="flex gap-2">
           {page > 1 && (
