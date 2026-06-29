@@ -42,7 +42,8 @@ export default async function AdminUsersPage({
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  const roleColors: Record<string, string> = {
+  const roleColors: Record<UserRole, string> = {
+    GUEST: "bg-gray-50 text-gray-700 border-gray-200",
     AUTHOR: "bg-blue-50 text-blue-700 border-blue-200",
     REVIEWER: "bg-amber-50 text-amber-700 border-amber-200",
     EDITOR: "bg-purple-50 text-purple-700 border-purple-200",
@@ -87,12 +88,9 @@ export default async function AdminUsersPage({
                 <span>{user._count.reviews} reviews</span>
                 <span>Joined: {new Date(user.createdAt).toLocaleDateString()}</span>
               </div>
-              <div className="flex gap-2">
-                <form action={`/api/admin/users/${user.id}?action=promote`} method="POST">
-                  <Button type="submit" variant="outline" size="sm">Promote</Button>
-                </form>
-                <Button variant="outline" size="sm">View</Button>
-              </div>
+              {/* TODO: Implement role change with confirmation dialog and proper client-side action.
+                  API expects PATCH /api/admin/users/[id] with JSON { role: UserRole }.
+                  Currently no user detail page exists for "View". */}
             </CardContent>
           </Card>
         ))}
