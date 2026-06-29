@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const securityHeaders = [
   {
@@ -70,4 +71,22 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // For all available options, see: https://docs.sentry.io/platforms/javascript/guides/nextjs/sdk-integrations/
+
+  // Upload source maps to Sentry for better error stack traces
+  sourcemaps: {
+    disable: true,
+  },
+
+  // Automatically tree-shake Sentry SDK logger statements to reduce bundle size
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
+
+  // Enables automatic instrumentation of Vercel Cron Monitors.
+  // See https://docs.sentry.io/platforms/javascript/guides/nextjs/crons/ for more information.
+  // automaticVercelMonitors: true,
+});
