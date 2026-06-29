@@ -243,6 +243,4 @@ model SiteSetting {
   key       String   @unique
   value     String
   updatedAt DateTime @updatedAt
-
-  @@index([key])
 }
