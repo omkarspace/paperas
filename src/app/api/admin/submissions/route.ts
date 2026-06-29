@@ -1,58 +1,42 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 import { PaperStatus } from "@prisma/client";
 
-export async function GET(request: Request) {
+const PAGE_SIZE = 20;
+
+export async function GET(request: NextRequest) {
   try {
     const session = await auth();
     if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const page = Number(searchParams.get("page")) || 1;
-    const limit = Number(searchParams.get("limit")) || 20;
-    const status = searchParams.get("status");
-    const search = searchParams.get("search");
+    const page = Math.max(1, Number(searchParams.get("page")) || 1);
+    const status = searchParams.get("status") || undefined;
 
-    const where: Record<string, unknown> = {};
-
-    if (status && status !== "ALL") {
-      where.status = status as PaperStatus;
-    }
-
-    if (search) {
-      where.OR = [
-        { title: { contains: search } },
-        { paperId: { contains: search } },
-        { author: { name: { contains: search } } },
-        { author: { email: { contains: search } } },
-      ];
-    }
+    const where = status ? { status: status as PaperStatus } : {};
 
     const [papers, total] = await Promise.all([
       db.paper.findMany({
         where,
-        skip: (page - 1) * limit,
-        take: limit,
+        include: { author: true, category: true },
         orderBy: { createdAt: "desc" },
-        include: {
-          author: {
-            select: { id: true, name: true, email: true, institution: true },
-          },
-          category: true,
-          _count: { select: { reviews: true, coAuthors: true } },
-        },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
       }),
       db.paper.count({ where }),
     ]);
 
     return NextResponse.json({
       papers,
-      total,
-      page,
-      totalPages: Math.ceil(total / limit),
+      pagination: {
+        page,
+        pageSize: PAGE_SIZE,
+        total,
+        totalPages: Math.ceil(total / PAGE_SIZE),
+      },
     });
   } catch (error) {
     console.error("Admin submissions list error:", error);
