@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
-import { PaperStatus } from "@prisma/client";
 import { notifyDecisionMade } from "@/lib/services/notifications";
+import { canTransition, updatePaperStatusSchema } from "@/lib/validation/paper";
 
 export async function PATCH(
   request: Request,
@@ -15,45 +15,44 @@ export async function PATCH(
     }
 
     const { id } = await params;
-    const { status } = await request.json();
+    const body = await request.json();
 
-    const validStatuses: PaperStatus[] = [
-      "UNDER_REVIEW",
-      "REVISION_REQUESTED",
-      "ACCEPTED",
-      "REJECTED",
-      "PUBLISHED",
-    ];
-
-    if (!validStatuses.includes(status)) {
-      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+    const parsed = updatePaperStatusSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
 
-    const paper = await db.paper.update({
-      where: { id },
-      data: {
-        status,
-        ...(status === "PUBLISHED" && { publicationDate: new Date() }),
-      },
-    });
+    const paper = await db.paper.findUnique({ where: { id } });
+    if (!paper) {
+      return NextResponse.json({ error: "Paper not found" }, { status: 404 });
+    }
+
+    const { status: newStatus } = parsed.data;
+    if (!canTransition(paper.status, newStatus)) {
+      return NextResponse.json(
+        { error: `Cannot transition from ${paper.status} to ${newStatus}` },
+        { status: 422 }
+      );
+    }
+
+    const updateData: Record<string, unknown> = { status: newStatus };
+    if (newStatus === "PUBLISHED") {
+      updateData.publicationDate = new Date();
+    }
+
+    const updatedPaper = await db.paper.update({ where: { id }, data: updateData });
 
     // Notify the author when a decision is made
     const decisionStatuses = ["ACCEPTED", "REJECTED", "REVISION_REQUESTED"] as const;
-    if (decisionStatuses.includes(status as typeof decisionStatuses[number])) {
-      const fullPaper = await db.paper.findUnique({
-        where: { id },
-        select: { title: true, authorId: true },
-      });
-      if (fullPaper) {
-        await notifyDecisionMade(
-          fullPaper.authorId,
-          fullPaper.title,
-          status as "ACCEPTED" | "REJECTED" | "REVISION_REQUESTED"
-        ).catch(() => {});
-      }
+    if (decisionStatuses.includes(newStatus as typeof decisionStatuses[number])) {
+      await notifyDecisionMade(
+        paper.authorId,
+        paper.title,
+        newStatus as "ACCEPTED" | "REJECTED" | "REVISION_REQUESTED"
+      ).catch(() => {});
     }
 
-    return NextResponse.json(paper);
+    return NextResponse.json(updatedPaper);
   } catch (_error) {
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
