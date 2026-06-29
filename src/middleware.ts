@@ -1,9 +1,8 @@
 import { type NextRequest } from "next/server";
-import { v4 as uuid } from "uuid";
 import { updateSession } from "@/lib/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
-  const requestId = uuid();
+  const requestId = crypto.randomUUID();
   const { supabaseResponse, user } = await updateSession(request);
   supabaseResponse.headers.set("X-Request-Id", requestId);
 
