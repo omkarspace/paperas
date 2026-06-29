@@ -73,6 +73,10 @@ model Paper {
   coAuthors       CoAuthor[]
   revisions       Revision[]
   paperAnalytics PaperAnalytics?
+
+  @@index([authorId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model CoAuthor {
@@ -130,6 +134,8 @@ model Review {
   reviewer User  @relation(fields: [reviewerId], references: [id])
 
   @@unique([paperId, reviewerId])
+  @@index([paperId])
+  @@index([reviewerId])
 }
 
 model JournalIssue {
@@ -174,6 +180,9 @@ model Notification {
   createdAt DateTime         @default(now())
 
   user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model PasswordResetToken {
@@ -193,6 +202,8 @@ model PaperAnalytics {
   updatedAt DateTime @updatedAt
 
   paper Paper @relation(fields: [paperId], references: [id])
+
+  @@index([paperId])
 }
 
 model EditorialBoardMember {
