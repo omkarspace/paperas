@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, BookOpen } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-primary" />
+          <Image src="/icon.svg" alt="Paperas" width={32} height={32} priority />
           <span className="font-serif text-xl font-bold text-primary">
             Paperas
           </span>
