@@ -1,6 +1,7 @@
 import { db } from "@/lib/db"
 import { NotificationType } from "@prisma/client"
 import { sendNotificationEmail, sendSubmissionConfirmation, sendReviewAssignedEmail, sendDecisionEmail } from "@/lib/services/email"
+import { logger } from "@/lib/logger"
 
 interface CreateNotificationParams {
   userId: string
@@ -37,8 +38,8 @@ export async function createNotification({
     if (user?.email) {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
       const fullLink = link ? `${baseUrl}${link}` : undefined
-      await sendNotificationEmail(user.email, title, message, fullLink).catch(() => {
-        // Don't fail the notification if email fails
+      await sendNotificationEmail(user.email, title, message, fullLink).catch((error) => {
+        logger.error("[notifications] Failed to send notification email", { error: error instanceof Error ? error.message : String(error), userId })
       })
     }
   }
@@ -53,7 +54,9 @@ export async function notifyPaperSubmitted(paperId: string, authorId: string, pa
   // Notify the author
   const author = await db.user.findUnique({ where: { id: authorId }, select: { email: true } })
   if (author?.email) {
-    await sendSubmissionConfirmation(author.email, paperTitle, paperId).catch(() => {})
+    await sendSubmissionConfirmation(author.email, paperTitle, paperId).catch((error) => {
+      logger.error("[notifications] Failed to send submission confirmation", { error: error instanceof Error ? error.message : String(error), paperId })
+    })
   }
 
   // Notify all admins/editors
@@ -99,7 +102,9 @@ export async function notifyReviewerAssigned(
   })
 
   if (reviewer.email) {
-    await sendReviewAssignedEmail(reviewer.email, reviewer.name || "Reviewer", paperTitle, paperId).catch(() => {})
+    await sendReviewAssignedEmail(reviewer.email, reviewer.name || "Reviewer", paperTitle, paperId).catch((error) => {
+      logger.error("[notifications] Failed to send review assigned email", { error: error instanceof Error ? error.message : String(error), paperId, reviewerId })
+    })
   }
 }
 
@@ -135,7 +140,9 @@ export async function notifyDecisionMade(
 
   const author = await db.user.findUnique({ where: { id: authorId }, select: { email: true, name: true } })
   if (author?.email) {
-    await sendDecisionEmail(author.email, author.name || "Author", paperTitle, decision, comments).catch(() => {})
+    await sendDecisionEmail(author.email, author.name || "Author", paperTitle, decision, comments).catch((error) => {
+      logger.error("[notifications] Failed to send decision email", { error: error instanceof Error ? error.message : String(error), paperTitle, decision })
+    })
   }
 }
 

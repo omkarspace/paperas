@@ -2,6 +2,7 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { db } from "../db";
 import { UserRole } from "@prisma/client";
+import { logger } from "@/lib/logger";
 
 export interface SessionUser {
   id: string;
@@ -76,7 +77,7 @@ export async function auth(): Promise<Session | null> {
       },
     };
   } catch (error) {
-    console.error("[auth] Error getting session:", error);
+    logger.error("[auth] Error getting session", { error: error instanceof Error ? error.message : String(error) });
     return null;
   }
 }
