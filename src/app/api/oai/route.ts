@@ -1,9 +1,5 @@
 import { NextRequest } from "next/server"
-import { generateIdentify, generateListMetadataFormats, generateListRecords, generateGetRecord } from "@/lib/services/oai-pmh"
-
-function escapeXml(str: string): string {
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;")
-}
+import { generateIdentify, generateListMetadataFormats, generateListRecords, generateGetRecord, escapeXml } from "@/lib/services/oai-pmh"
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -21,14 +17,14 @@ export async function GET(request: NextRequest) {
   }
 
   if (verb === "Identify") {
-    const xml = generateIdentify()
+    const xml = generateIdentify(baseUrl)
     return new Response(xml, {
       headers: { "Content-Type": "application/xml" },
     })
   }
 
   if (verb === "ListMetadataFormats") {
-    const xml = generateListMetadataFormats()
+    const xml = generateListMetadataFormats(baseUrl)
     return new Response(xml, {
       headers: { "Content-Type": "application/xml" },
     })
