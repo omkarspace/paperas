@@ -114,7 +114,7 @@ export async function notifyDecisionMade(
 ) {
   const typeMap: Record<string, NotificationType> = {
     ACCEPTED: NotificationType.PAPER_ACCEPTED,
-    REJECTED: NotificationType.REVISION_REQUESTED,
+    REJECTED: NotificationType.PAPER_REJECTED,
     REVISION_REQUESTED: NotificationType.REVISION_REQUESTED,
   }
 
