@@ -34,6 +34,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid reviewer" }, { status: 400 });
     }
 
+    const paper = await db.paper.findUnique({ where: { id: data.paperId } });
+    if (!paper) {
+      return NextResponse.json({ error: "Paper not found" }, { status: 404 });
+    }
+
     let review;
     try {
       review = await db.review.create({
@@ -54,16 +59,16 @@ export async function POST(request: Request) {
       throw err;
     }
 
-    await db.paper.update({
-      where: { id: data.paperId },
-      data: { status: "UNDER_REVIEW" },
-    });
-
-    // Notify the reviewer
-    const paper = await db.paper.findUnique({ where: { id: data.paperId }, select: { title: true } });
-    if (paper) {
-      await notifyReviewerAssigned(data.reviewerId, data.paperId, paper.title).catch(() => {});
+    if (paper.status === "SUBMITTED") {
+      await db.paper.update({
+        where: { id: data.paperId },
+        data: { status: "UNDER_REVIEW" },
+      });
     }
+
+    await notifyReviewerAssigned(data.reviewerId, data.paperId, paper.title).catch((err) => {
+      console.error("Failed to send reviewer assignment notification:", err);
+    });
 
     return NextResponse.json(review, { status: 201 });
   } catch (error) {
