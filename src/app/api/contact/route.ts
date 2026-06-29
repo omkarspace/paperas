@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
 import { z } from "zod";
+import { db } from "@/lib/db";
 
 const contactSchema = z.object({
   name: z.string().min(1).max(200),
@@ -34,6 +35,10 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const data = contactSchema.parse(body);
+
+    await db.contactMessage.create({
+      data: { name: data.name, email: data.email, subject: data.subject, message: data.message },
+    });
 
     return NextResponse.json({ message: "Message received. We'll get back to you soon." });
   } catch (error) {
