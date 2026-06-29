@@ -1,4 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { cookies } from "next/headers";
 import { db } from "../db";
 import { UserRole } from "@prisma/client";
 
@@ -21,18 +22,49 @@ export interface Session {
  */
 export async function auth(): Promise<Session | null> {
   try {
-    const supabase = await createClient();
+    const cookieStore = await cookies();
+
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value;
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            try {
+              cookieStore.set({ name, value, ...options });
+            } catch {
+              // Ignore — set() in Server Component
+            }
+          },
+          remove(name: string, options: CookieOptions) {
+            try {
+              cookieStore.set({ name, value: "", ...options });
+            } catch {
+              // Ignore — remove() in Server Component
+            }
+          },
+        },
+      }
+    );
+
     const { data: { user }, error } = await supabase.auth.getUser();
 
-    if (error || !user) return null;
+    if (error || !user) {
+      return null;
+    }
 
-    // Look up our app user by Supabase auth ID
+    // Look up role from Prisma
     const appUser = await db.user.findUnique({
       where: { id: user.id },
       select: { id: true, email: true, name: true, role: true, image: true },
     });
 
-    if (!appUser) return null;
+    if (!appUser) {
+      return null;
+    }
 
     return {
       user: {
@@ -43,7 +75,8 @@ export async function auth(): Promise<Session | null> {
         image: appUser.image,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("[auth] Error getting session:", error);
     return null;
   }
 }
