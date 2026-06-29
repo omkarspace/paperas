@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
-import { notifyDecisionMade } from "@/lib/services/notifications";
+import { notifyDecisionMade, notifyPaperPublished } from "@/lib/services/notifications";
 import { canTransition, updatePaperStatusSchema } from "@/lib/validation/paper";
 
 export async function PATCH(
@@ -50,6 +50,11 @@ export async function PATCH(
         paper.title,
         newStatus as "ACCEPTED" | "REJECTED" | "REVISION_REQUESTED"
       ).catch(() => {});
+    }
+
+    // Notify the author when paper is published
+    if (newStatus === "PUBLISHED") {
+      await notifyPaperPublished(id).catch(() => {});
     }
 
     return NextResponse.json(updatedPaper);

@@ -147,6 +147,26 @@ export async function notifyDecisionMade(
 }
 
 /**
+ * Notify when a paper is published.
+ */
+export async function notifyPaperPublished(paperId: string): Promise<void> {
+  const paper = await db.paper.findUnique({
+    where: { id: paperId },
+    select: { title: true, authorId: true, author: { select: { email: true, name: true } } },
+  });
+  if (!paper) return;
+
+  await createNotification({
+    userId: paper.authorId,
+    type: NotificationType.PAPER_PUBLISHED,
+    title: "Paper Published!",
+    message: `Your paper "${paper.title}" has been published.`,
+    link: `/papers/${paperId}`,
+    sendEmail: true,
+  });
+}
+
+/**
  * Notify when a review is submitted (for editors/admins).
  */
 export async function notifyReviewSubmitted(
