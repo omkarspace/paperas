@@ -94,6 +94,11 @@ export async function DELETE(
       return NextResponse.json({ error: "coAuthorId is required" }, { status: 400 });
     }
 
+    const coAuthor = await db.coAuthor.findUnique({ where: { id: coAuthorId } });
+    if (!coAuthor || coAuthor.paperId !== id) {
+      return NextResponse.json({ error: "Co-author not found on this paper" }, { status: 404 });
+    }
+
     await db.coAuthor.delete({ where: { id: coAuthorId } });
 
     return NextResponse.json({ success: true });
