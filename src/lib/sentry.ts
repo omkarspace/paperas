@@ -7,7 +7,7 @@ export function captureException(error: Error, context?: Record<string, unknown>
         scope.setExtra(key, value);
       });
     }
-    Sentry.captureException(error);
+    scope.captureException(error);
   });
 }
 
