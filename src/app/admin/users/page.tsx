@@ -4,17 +4,43 @@ import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { UserRole } from "@prisma/client";
+
+const PAGE_SIZE = 20;
+
+const VALID_ROLES = new Set(Object.values(UserRole));
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; role?: string }>;
+}) {
+  const params = await searchParams;
   const session = await auth();
   if (!session || session.user.role !== "ADMIN") redirect("/");
 
-  const users = await db.user.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { _count: { select: { papers: true, reviews: true } } },
-  });
+  const page = Math.max(1, Number(params.page) || 1);
+  const roleParam = params.role || undefined;
+  const role = roleParam && VALID_ROLES.has(roleParam as UserRole)
+    ? (roleParam as UserRole)
+    : undefined;
+
+  const where = role ? { role } : {};
+
+  const [users, total] = await Promise.all([
+    db.user.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      include: { _count: { select: { papers: true, reviews: true } } },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+    db.user.count({ where }),
+  ]);
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   const roleColors: Record<string, string> = {
     AUTHOR: "bg-blue-50 text-blue-700 border-blue-200",
@@ -24,8 +50,26 @@ export default async function AdminUsersPage() {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-6">User Management</h2>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-semibold">User Management</h2>
+
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} of {total} users
+        </p>
+        <div className="flex gap-2">
+          {page > 1 && (
+            <a href={`/admin/users?page=${page - 1}${role ? `&role=${role}` : ""}`}>
+              <Button variant="outline" size="sm">Previous</Button>
+            </a>
+          )}
+          {page < totalPages && (
+            <a href={`/admin/users?page=${page + 1}${role ? `&role=${role}` : ""}`}>
+              <Button variant="outline" size="sm">Next</Button>
+            </a>
+          )}
+        </div>
+      </div>
 
       <div className="space-y-4">
         {users.map((user) => (
