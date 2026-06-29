@@ -32,11 +32,19 @@ export async function registerDOI(paper: PaperForDOI) {
     },
   }
 
+  const apiUser = process.env.CROSSREF_API_USER
+  const apiPassword = process.env.CROSSREF_API_PASSWORD
+
+  const authHeader = apiUser && apiPassword
+    ? "Basic " + Buffer.from(`${apiUser}:${apiPassword}`).toString("base64")
+    : undefined
+
   try {
     const response = await fetch(`${url}/deposits`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(authHeader ? { Authorization: authHeader } : {}),
       },
       body: JSON.stringify(payload),
     })
