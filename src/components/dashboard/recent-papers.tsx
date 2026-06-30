@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -25,12 +24,9 @@ const statusLabel: Record<string, string> = {
   PUBLISHED: "Published",
 };
 
-async function PaperList() {
-  const session = await auth();
-  if (!session) return null;
-
+async function PaperList({ userId }: { userId: string }) {
   const papers = await db.paper.findMany({
-    where: { authorId: session.user.id },
+    where: { authorId: userId },
     orderBy: { createdAt: "desc" },
     take: 10,
   });
@@ -74,7 +70,7 @@ async function PaperList() {
   );
 }
 
-export function RecentPapers() {
+export function RecentPapers({ userId }: { userId: string }) {
   return (
     <Suspense
       fallback={
@@ -92,7 +88,7 @@ export function RecentPapers() {
         </Card>
       }
     >
-      <PaperList />
+      <PaperList userId={userId} />
     </Suspense>
   );
 }

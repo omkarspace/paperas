@@ -6,6 +6,11 @@ export async function middleware(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request);
   supabaseResponse.headers.set("X-Request-Id", requestId);
 
+  if (user) {
+    request.headers.set("x-middleware-user-id", user.id);
+    request.headers.set("x-middleware-user-email", user.email ?? "");
+  }
+
   const { pathname } = request.nextUrl;
 
   const isAuthRoute = pathname.startsWith("/auth");

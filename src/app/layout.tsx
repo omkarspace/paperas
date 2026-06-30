@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${sourceSans.variable} ${libreBaskerville.variable} ${jetbrainsMono.variable}`}>
-      <body className="antialiased min-h-screen bg-background font-sans">
+      <body className="antialiased min-h-screen bg-background font-sans" suppressHydrationWarning>
         {children}
       </body>
     </html>

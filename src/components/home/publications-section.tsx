@@ -1,17 +1,23 @@
 import Link from "next/link";
-import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export async function PublicationsSection() {
-  const papers = await db.paper.findMany({
-    where: { status: "PUBLISHED" },
-    orderBy: { publicationDate: "desc" },
-    take: 6,
-    include: { author: true, category: true },
-  });
+type PaperItem = {
+  id: string;
+  paperId: string;
+  title: string;
+  abstract: string;
+  doi: string | null;
+  author: { name: string | null } | null;
+  category: { name: string } | null;
+};
 
+interface PublicationsSectionProps {
+  papers: PaperItem[];
+}
+
+export function PublicationsSection({ papers }: PublicationsSectionProps) {
   if (papers.length === 0) {
     return (
       <section className="py-20">

@@ -68,7 +68,7 @@ export async function DELETE(request: NextRequest) {
     await db.editorialBoardMember.delete({ where: { id } })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to delete member" }, { status: 500 })
   }
 }

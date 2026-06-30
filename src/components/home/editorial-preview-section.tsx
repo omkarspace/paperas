@@ -1,17 +1,21 @@
 import Link from "next/link";
-import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Quote } from "lucide-react";
 
-export async function EditorialPreviewSection() {
-  const papers = await db.paper.findMany({
-    where: { status: "PUBLISHED" },
-    orderBy: { publicationDate: "desc" },
-    take: 2,
-    include: { author: true },
-  });
+type PaperItem = {
+  id: string;
+  paperId: string;
+  title: string;
+  abstract: string;
+  author: { name: string | null } | null;
+};
 
+interface EditorialPreviewSectionProps {
+  papers: PaperItem[];
+}
+
+export function EditorialPreviewSection({ papers }: EditorialPreviewSectionProps) {
   if (papers.length === 0) {
     return null;
   }

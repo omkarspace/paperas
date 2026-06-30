@@ -49,8 +49,8 @@ export async function POST(request: Request) {
           recommendation: "ACCEPT",
         },
       });
-    } catch (err: any) {
-      if (err?.code === "P2002") {
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "code" in err && err.code === "P2002") {
         return NextResponse.json(
           { error: "This reviewer is already assigned to this paper" },
           { status: 409 }

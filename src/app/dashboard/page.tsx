@@ -15,7 +15,7 @@ export default async function DashboardPage() {
 
       <MetricsGrid userId={session.user.id} />
 
-      <RecentPapers />
+        <RecentPapers userId={session.user.id} />
     </div>
   );
 }

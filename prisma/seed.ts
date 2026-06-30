@@ -199,10 +199,10 @@ async function main() {
 
   // --- Papers ---
   console.log("\n3. Creating papers...");
-  const authorId = createdUsers["author@researchverse.in"];
-  const author2Id = createdUsers["author2@researchverse.in"];
-  const author3Id = createdUsers["author3@researchverse.in"];
-  const reviewerId = createdUsers["reviewer@researchverse.in"];
+  const authorId = createdUsers["author@paperas.in"];
+  const author2Id = createdUsers["author2@paperas.in"];
+  const author3Id = createdUsers["author3@paperas.in"];
+  const reviewerId = createdUsers["reviewer@paperas.in"];
 
   const authorIds = [authorId, author2Id, author3Id];
 
@@ -225,8 +225,8 @@ async function main() {
     const paper = await prisma.paper.create({
       data: {
         ...paperData,
-        authorId: authorIds[i % authorIds.length],
-        categoryId: category?.id || null,
+        author: { connect: { id: authorIds[i % authorIds.length] } },
+        category: category ? { connect: { id: category.id } } : undefined,
         submissionDate: new Date(Date.now() - (papers.length - i) * 7 * 24 * 60 * 60 * 1000),
         publicationDate: paperData.status === "PUBLISHED" ? new Date(Date.now() - (papers.length - i) * 3 * 24 * 60 * 60 * 1000) : null,
       },
@@ -238,8 +238,8 @@ async function main() {
       const reviewData = reviews[i];
       await prisma.review.create({
         data: {
-          paperId: paper.id,
-          reviewerId: reviewerId,
+          paper: { connect: { id: paper.id } },
+          reviewer: { connect: { id: reviewerId } },
           ...reviewData,
         },
       });
