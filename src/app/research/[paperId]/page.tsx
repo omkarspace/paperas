@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { PaperViewTracker } from "@/components/papers/paper-view-tracker";
 import { DownloadButton } from "@/components/papers/download-button";
 import { CitationDialog } from "@/components/papers/citation-dialog";
+import { SocialShareButtons } from "@/components/papers/social-share-buttons";
+import { RelatedPapers } from "@/components/papers/related-papers";
 import { JsonLd } from "@/components/shared/json-ld";
 
 export const dynamic = "force-dynamic";
@@ -82,9 +85,12 @@ export default async function PaperDetailPage({
         </h1>
         <p className="text-sm text-muted-foreground">
           {paper.author?.name && (
-            <span className="font-medium text-foreground">
+            <Link
+              href={`/author/${paper.authorId}`}
+              className="font-medium text-foreground hover:text-primary transition-colors"
+            >
               {paper.author.name}
-            </span>
+            </Link>
           )}
           {paper.author?.name && paper.author?.institution && (
             <span className="text-muted-foreground"> &middot; </span>
@@ -185,6 +191,16 @@ export default async function PaperDetailPage({
           </div>
         </div>
       )}
+
+      <div className="mb-8">
+        <SocialShareButtons
+          title={paper.title}
+          url={`${process.env.NEXT_PUBLIC_APP_URL || "https://paperas.dev"}/research/${paper.paperId}`}
+        />
+      </div>
+
+      <RelatedPapers categoryId={paper.categoryId} currentPaperId={paper.id} />
+
       <PaperViewTracker paperId={paper.paperId} />
       <JsonLd
         data={{

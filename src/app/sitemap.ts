@@ -57,7 +57,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }))
 
-    return [...staticPages, ...paperPages, ...volumePages, ...issuePages]
+    const authors = await db.user.findMany({
+      where: { role: { in: ["AUTHOR", "REVIEWER", "EDITOR", "ADMIN"] } },
+      select: { id: true, updatedAt: true },
+    })
+
+    const authorPages = authors.map((author) => ({
+      url: `${baseUrl}/author/${author.id}`,
+      lastModified: author.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    }))
+
+    return [...staticPages, ...paperPages, ...volumePages, ...issuePages, ...authorPages]
   } catch {
     return staticPages
   }

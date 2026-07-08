@@ -13,6 +13,7 @@ import {
   BarChart3,
   BookOpen,
   BookMarked,
+  Mail,
 } from "lucide-react";
 import {
   Sidebar,
@@ -47,6 +48,7 @@ const reviewerNav: NavItem[] = [
 const adminNav: NavItem[] = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Users", href: "/admin/users", icon: Users },
+  { title: "Messages", href: "/admin/messages", icon: Mail },
   { title: "Submissions", href: "/admin/submissions", icon: FileText },
   { title: "Issues", href: "/admin/issues", icon: BookOpen },
   { title: "Editorial Board", href: "/admin/editorial-board", icon: BookMarked },

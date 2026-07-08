@@ -7,6 +7,8 @@ const footerLinks = {
     { href: "/about", label: "About Us" },
     { href: "/about#editorial-board", label: "Editorial Board" },
     { href: "/journal", label: "Journal Scope" },
+    { href: "/call-for-papers", label: "Call for Papers" },
+    { href: "/faq", label: "FAQ" },
     { href: "/contact", label: "Contact" },
   ],
   authors: [
@@ -18,6 +20,7 @@ const footerLinks = {
   reviewers: [
     { href: "/auth/login", label: "Reviewer Login" },
     { href: "/reviewer", label: "Reviewer Dashboard" },
+    { href: "/reviewer/guidelines", label: "Reviewer Guidelines" },
     { href: "/journal#review-process", label: "Review Process" },
   ],
 };
