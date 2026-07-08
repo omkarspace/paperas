@@ -22,8 +22,11 @@ export default function AboutPage() {
       <Navbar />
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-primary py-20">
-          <div className="container mx-auto max-w-7xl px-4 md:px-6 text-center">
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90 py-20 animate-gradient-shift">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+          <div className="absolute top-10 right-[15%] w-32 h-32 rounded-full border border-secondary/20 bg-secondary/5 animate-float-slow" />
+          <div className="absolute bottom-10 left-[10%] w-24 h-24 rotate-45 border border-secondary/15 bg-secondary/5 animate-float-medium" />
+          <div className="container relative mx-auto max-w-7xl px-4 md:px-6 text-center">
             <h1 className="font-serif text-4xl font-bold text-primary-foreground">About Paperas</h1>
             <p className="mt-4 text-primary-foreground/80 max-w-2xl mx-auto">
               Advancing scholarly communication through rigorous peer review and open access publishing.
@@ -44,30 +47,19 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Card>
-                  <CardContent className="pt-6 text-center">
-                    <Target className="h-8 w-8 text-secondary mx-auto mb-2" />
-                    <p className="font-serif font-semibold">Rigorous Review</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="pt-6 text-center">
-                    <BookOpen className="h-8 w-8 text-secondary mx-auto mb-2" />
-                    <p className="font-serif font-semibold">Open Access</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="pt-6 text-center">
-                    <Users className="h-8 w-8 text-secondary mx-auto mb-2" />
-                    <p className="font-serif font-semibold">Expert Editors</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="pt-6 text-center">
-                    <Award className="h-8 w-8 text-secondary mx-auto mb-2" />
-                    <p className="font-serif font-semibold">Global Indexing</p>
-                  </CardContent>
-                </Card>
+                {[
+                  { icon: Target, label: "Rigorous Review" },
+                  { icon: BookOpen, label: "Open Access" },
+                  { icon: Users, label: "Expert Editors" },
+                  { icon: Award, label: "Global Indexing" },
+                ].map((item) => (
+                  <Card key={item.label} className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                    <CardContent className="pt-6 text-center">
+                      <item.icon className="h-8 w-8 text-secondary mx-auto mb-2 transition-transform duration-300 group-hover:scale-110" />
+                      <p className="font-serif font-semibold">{item.label}</p>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </div>
@@ -79,7 +71,7 @@ export default function AboutPage() {
             <h2 className="font-serif text-3xl font-semibold text-primary mb-8 text-center">Editorial Board</h2>
             <div className="grid gap-6 md:grid-cols-3">
               {team.map((member) => (
-                <Card key={member.name}>
+                <Card key={member.name} className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                   <CardHeader>
                     <CardTitle className="font-serif text-lg">{member.name}</CardTitle>
                   </CardHeader>
@@ -99,10 +91,10 @@ export default function AboutPage() {
             <h2 className="font-serif text-3xl font-semibold text-primary mb-8 text-center">Milestones</h2>
             <div className="space-y-4 max-w-2xl mx-auto">
               {milestones.map((m) => (
-                <div key={m.year} className="flex gap-4 items-center">
-                  <div className="font-mono text-sm font-bold text-secondary w-16">{m.year}</div>
-                  <div className="h-px flex-1 bg-border" />
-                  <div className="text-muted-foreground">{m.event}</div>
+                <div key={m.year} className="flex gap-4 items-center group">
+                  <div className="font-mono text-sm font-bold text-secondary w-16 transition-transform duration-300 group-hover:scale-110">{m.year}</div>
+                  <div className="h-px flex-1 bg-border transition-colors duration-300 group-hover:bg-secondary/40" />
+                  <div className="text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{m.event}</div>
                 </div>
               ))}
             </div>

@@ -45,8 +45,12 @@ export default function SearchPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">
-        <section className="bg-primary py-16">
-          <div className="container mx-auto max-w-7xl px-4 md:px-6">
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90 py-20 animate-gradient-shift">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+          <div className="absolute top-10 left-[20%] w-28 h-28 rounded-full border border-secondary/20 bg-secondary/5 animate-float-slow" />
+          <div className="absolute bottom-10 right-[15%] w-24 h-24 rotate-12 border border-secondary/15 bg-secondary/5 animate-float-medium" />
+          <div className="absolute top-20 right-[25%] w-16 h-16 rounded-full bg-secondary/10 blur-sm animate-float-fast" />
+          <div className="container relative mx-auto max-w-7xl px-4 md:px-6">
             <h1 className="font-serif text-3xl font-bold text-primary-foreground text-center mb-8">
               Search Papers
             </h1>
@@ -67,7 +71,7 @@ export default function SearchPage() {
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">{results.length} result(s) found</p>
                 {results.map((paper) => (
-                  <Card key={paper.id} className="hover:shadow-md transition-shadow">
+                  <Card key={paper.id} className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between">
                         <div className="space-y-1">
@@ -77,7 +81,7 @@ export default function SearchPage() {
                             </Badge>
                           )}
                           <h3 className="font-serif font-semibold">
-                            <Link href={`/research/${paper.paperId}`} className="hover:text-secondary transition-colors">
+                            <Link href={`/research/${paper.paperId}`} className="group-hover:text-secondary transition-colors">
                               {paper.title}
                             </Link>
                           </h3>

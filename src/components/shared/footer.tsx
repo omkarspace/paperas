@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BookOpen, Mail } from "lucide-react";
+import Image from "next/image";
+import { Mail } from "lucide-react";
 
 const footerLinks = {
   about: [
@@ -28,8 +29,14 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <BookOpen className="h-6 w-6 text-secondary" />
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <Image
+                src="/icon.svg"
+                alt="Paperas"
+                width={28}
+                height={28}
+                className="rounded-full transition-transform duration-300 group-hover:scale-105"
+              />
               <span className="font-serif text-xl font-bold">Paperas</span>
             </Link>
             <p className="text-sm text-primary-foreground/70">

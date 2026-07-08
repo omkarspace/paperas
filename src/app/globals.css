@@ -126,3 +126,102 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Navbar link underline animation */
+  .nav-link {
+    @apply relative;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-1/2 h-0.5 w-0 bg-secondary transition-all duration-300 ease-out;
+  }
+  .nav-link:hover::after {
+    @apply w-full left-0;
+  }
+
+  /* Floating shape animations */
+  @keyframes float-slow {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(10px, -15px) rotate(3deg); }
+    50% { transform: translate(-5px, -25px) rotate(-2deg); }
+    75% { transform: translate(-15px, -10px) rotate(1deg); }
+  }
+
+  @keyframes float-medium {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(-20px, -10px) rotate(-4deg); }
+    66% { transform: translate(15px, -20px) rotate(3deg); }
+  }
+
+  @keyframes float-fast {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(8px, -12px) scale(1.05); }
+  }
+
+  /* Gradient mesh animation */
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 100% 0%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+  }
+
+  /* Fade in up animation */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-float-slow {
+    animation: float-slow 18s ease-in-out infinite;
+  }
+  .animate-float-medium {
+    animation: float-medium 14s ease-in-out infinite;
+  }
+  .animate-float-fast {
+    animation: float-fast 10s ease-in-out infinite;
+  }
+  .animate-gradient-shift {
+    background-size: 200% 200%;
+    animation: gradient-shift 15s ease infinite;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+  .animate-fade-in-up-delay-1 {
+    animation: fade-in-up 0.8s ease-out 0.15s forwards;
+    opacity: 0;
+  }
+  .animate-fade-in-up-delay-2 {
+    animation: fade-in-up 0.8s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+  .animate-fade-in-up-delay-3 {
+    animation: fade-in-up 0.8s ease-out 0.45s forwards;
+    opacity: 0;
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float-slow,
+    .animate-float-medium,
+    .animate-float-fast,
+    .animate-gradient-shift {
+      animation: none;
+    }
+    .animate-fade-in-up,
+    .animate-fade-in-up-delay-1,
+    .animate-fade-in-up-delay-2,
+    .animate-fade-in-up-delay-3 {
+      animation: none;
+      opacity: 1;
+    }
+  }
+}

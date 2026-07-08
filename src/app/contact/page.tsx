@@ -48,8 +48,11 @@ export default function ContactPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">
-        <section className="bg-primary py-20">
-          <div className="container mx-auto max-w-7xl px-4 md:px-6 text-center">
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90 py-20 animate-gradient-shift">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+          <div className="absolute top-10 left-[20%] w-24 h-24 rotate-12 border border-secondary/15 bg-secondary/5 animate-float-fast" />
+          <div className="absolute bottom-10 right-[15%] w-32 h-32 rounded-full border border-secondary/20 bg-secondary/5 animate-float-medium" />
+          <div className="container relative mx-auto max-w-7xl px-4 md:px-6 text-center">
             <h1 className="font-serif text-4xl font-bold text-primary-foreground">Contact Us</h1>
             <p className="mt-4 text-primary-foreground/80">
               Get in touch with our editorial team
@@ -60,7 +63,7 @@ export default function ContactPage() {
         <section className="py-20">
           <div className="container mx-auto max-w-7xl px-4 md:px-6">
             <div className="grid gap-8 lg:grid-cols-2">
-              <Card>
+              <Card className="transition-shadow duration-300 hover:shadow-lg">
                 <CardContent className="pt-6">
                   {sent ? (
                     <div className="text-center py-8 space-y-4">
@@ -88,7 +91,7 @@ export default function ContactPage() {
                         <Textarea id="message" name="message" rows={5} placeholder="Your message..." required />
                       </div>
                       {error && <p className="text-sm text-red-600">{error}</p>}
-                      <Button type="submit" className="w-full" disabled={loading}>
+                      <Button type="submit" className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-all duration-300 hover:shadow-md" disabled={loading}>
                         {loading ? "Sending..." : "Send Message"}
                       </Button>
                     </form>
@@ -97,9 +100,9 @@ export default function ContactPage() {
               </Card>
 
               <div className="space-y-6">
-                <Card>
+                <Card className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                   <CardContent className="pt-6 flex items-start gap-4">
-                    <MapPin className="h-5 w-5 text-secondary mt-0.5" />
+                    <MapPin className="h-5 w-5 text-secondary mt-0.5 transition-transform duration-300 group-hover:scale-110" />
                     <div>
                       <p className="font-medium">Address</p>
                       <p className="text-sm text-muted-foreground">
@@ -109,9 +112,9 @@ export default function ContactPage() {
                     </div>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                   <CardContent className="pt-6 flex items-start gap-4">
-                    <Mail className="h-5 w-5 text-secondary mt-0.5" />
+                    <Mail className="h-5 w-5 text-secondary mt-0.5 transition-transform duration-300 group-hover:scale-110" />
                     <div>
                       <p className="font-medium">Email</p>
                       <p className="text-sm text-muted-foreground">editor@paperas.in</p>

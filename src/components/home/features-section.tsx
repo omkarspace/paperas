@@ -34,9 +34,12 @@ export function FeaturesSection() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {highlights.map((item) => (
-            <Card key={item.title} className="border-t-2 border-t-secondary">
+            <Card
+              key={item.title}
+              className="group border-t-2 border-t-secondary transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            >
               <CardHeader>
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-110">
                   <item.icon className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="font-serif text-xl mt-4">{item.title}</CardTitle>

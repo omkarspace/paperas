@@ -48,12 +48,12 @@ export function NewsletterSection() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1"
+              className="flex-1 transition-shadow duration-300 focus:shadow-md"
               required
             />
             <Button
               type="submit"
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
               disabled={loading}
             >
               {loading ? "..." : "Subscribe"}

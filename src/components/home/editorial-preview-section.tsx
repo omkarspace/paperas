@@ -34,15 +34,21 @@ export function EditorialPreviewSection({ papers }: EditorialPreviewSectionProps
 
         <div className="grid gap-6 md:grid-cols-2">
           {papers.map((paper) => (
-            <Card key={paper.id} className="border-l-4 border-l-secondary">
+            <Card
+              key={paper.id}
+              className="group border-l-4 border-l-secondary transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            >
               <CardContent className="pt-6">
-                <Quote className="h-8 w-8 text-secondary/40 mb-4" />
+                <Quote className="h-8 w-8 text-secondary/40 mb-4 transition-transform duration-300 group-hover:scale-110" />
                 <p className="font-serif italic text-muted-foreground mb-4 line-clamp-4">
                   &ldquo;{paper.abstract}&rdquo;
                 </p>
                 <div className="border-t border-border pt-4">
                   <h3 className="font-serif font-semibold text-primary">
-                    <Link href={`/research/${paper.paperId}`} className="hover:text-secondary transition-colors">
+                    <Link
+                      href={`/research/${paper.paperId}`}
+                      className="hover:text-secondary transition-colors"
+                    >
                       {paper.title}
                     </Link>
                   </h3>

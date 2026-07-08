@@ -43,11 +43,11 @@ function StatCard({ label, value, suffix }: StatItem) {
   const { count, ref } = useCountUp(value);
 
   return (
-    <div ref={ref} className="text-center p-6">
-      <div className="font-serif text-4xl font-bold text-primary">
+    <div ref={ref} className="text-center p-6 relative">
+      <div className="font-serif text-4xl font-bold text-primary tracking-tight">
         {count.toLocaleString()}{suffix}
       </div>
-      <div className="mt-2 text-sm text-muted-foreground">{label}</div>
+      <div className="mt-2 text-sm text-muted-foreground font-medium">{label}</div>
     </div>
   );
 }
@@ -61,8 +61,13 @@ export function StatsSection({ stats }: StatsSectionProps) {
     <section className="border-y border-border bg-muted/30 py-12">
       <div className="container mx-auto max-w-7xl px-4 md:px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat) => (
-            <StatCard key={stat.label} {...stat} />
+          {stats.map((stat, index) => (
+            <div key={stat.label} className="relative">
+              <StatCard {...stat} />
+              {index < stats.length - 1 && (
+                <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 h-12 w-px bg-border" />
+              )}
+            </div>
           ))}
         </div>
       </div>

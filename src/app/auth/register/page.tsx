@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -64,10 +64,10 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-8">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md transition-shadow duration-300 hover:shadow-lg">
         <CardHeader className="text-center">
           <Link href="/" className="mx-auto mb-4">
-            <BookOpen className="h-10 w-10 text-primary" />
+            <Image src="/icon.svg" alt="Paperas" width={48} height={48} className="rounded-full" />
           </Link>
           <CardTitle className="font-serif text-2xl">Create Account</CardTitle>
           <CardDescription>Join the Paperas academic community</CardDescription>
@@ -115,7 +115,7 @@ export default function RegisterPage() {
             {error && (
               <p className="text-sm text-red-600">{error}</p>
             )}
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-all duration-300 hover:shadow-md" disabled={loading}>
               {loading ? "Creating account..." : "Create Account"}
             </Button>
             <p className="text-center text-sm text-muted-foreground">

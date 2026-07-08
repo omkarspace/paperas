@@ -71,3 +71,6 @@ temp/
 # Skills
 /skills/
 superpowers/
+
+# LCM / opencode archive
+.lcm/
