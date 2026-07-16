@@ -1,4 +1,5 @@
 import { Resend } from "resend"
+import { logger } from "@/lib/logger"
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
@@ -10,7 +11,7 @@ interface SendEmailParams {
 
 export async function sendEmail({ to, subject, html }: SendEmailParams) {
   if (!resend) {
-    console.warn("Email not sent: RESEND_API_KEY not configured", { to, subject })
+    logger.warn("Email not sent: RESEND_API_KEY not configured", { to, subject })
     return
   }
 

@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { logger } from "@/lib/logger";
 
 const genAI = process.env.GEMINI_API_KEY
   ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
@@ -16,7 +17,7 @@ export async function summarizeAbstract(text: string): Promise<string> {
     );
     return result.response.text();
   } catch (error) {
-    console.error("Gemini summarization error:", error);
+    logger.error("Gemini summarization error", { error: error instanceof Error ? error.message : String(error) });
     return "Failed to generate summary";
   }
 }
@@ -34,7 +35,7 @@ export async function extractKeywords(text: string): Promise<string[]> {
     const response = result.response.text();
     return response.split(",").map((k) => k.trim().toLowerCase());
   } catch (error) {
-    console.error("Gemini keyword extraction error:", error);
+    logger.error("Gemini keyword extraction error", { error: error instanceof Error ? error.message : String(error) });
     return [];
   }
 }
@@ -51,7 +52,7 @@ export async function improveWriting(text: string): Promise<string> {
     );
     return result.response.text();
   } catch (error) {
-    console.error("Gemini improvement error:", error);
+    logger.error("Gemini improvement error", { error: error instanceof Error ? error.message : String(error) });
     return text;
   }
 }

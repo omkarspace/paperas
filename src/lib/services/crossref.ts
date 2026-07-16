@@ -1,3 +1,5 @@
+import { logger } from "@/lib/logger"
+
 interface PaperForDOI {
   paperId: string
   title: string
@@ -6,11 +8,11 @@ interface PaperForDOI {
 }
 
 export async function registerDOI(paper: PaperForDOI) {
-  const depositorEmail = process.env.CROSSREF_EMAIL
+  const depositorEmail = process.env.CROSSREF_DEPOSIT_EMAIL
   const prefix = process.env.DOI_PREFIX || "xxxx"
 
   if (!depositorEmail) {
-    console.warn("Crossref email not configured — DOI registration skipped")
+    logger.warn("Crossref email not configured — DOI registration skipped")
     return null
   }
 
@@ -50,7 +52,7 @@ export async function registerDOI(paper: PaperForDOI) {
     })
     return { success: response.ok, doi }
   } catch (error) {
-    console.error("DOI registration failed:", error)
+    logger.error("DOI registration failed", { error: error instanceof Error ? error.message : String(error) })
     return { success: false, doi }
   }
 }

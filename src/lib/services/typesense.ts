@@ -1,4 +1,5 @@
 import Typesense from "typesense";
+import { logger } from "@/lib/logger";
 
 const typesenseClient = process.env.TYPESENSE_API_KEY
   ? new Typesense.Client({
@@ -35,7 +36,7 @@ export async function searchPapers(query: string, page: number = 1) {
       totalPages: Math.ceil((result.found || 0) / perPage),
     };
   } catch (error) {
-    console.error("Failed to search papers:", error);
+    logger.error("Failed to search papers", { error: error instanceof Error ? error.message : String(error) });
     return { papers: [], total: 0, page, totalPages: 0 };
   }
 }
@@ -53,7 +54,7 @@ export async function indexPaper(paper: {
   try {
     await typesenseClient.collections("papers").documents().upsert(paper);
   } catch (error) {
-    console.error("Failed to index paper:", error);
+    logger.error("Failed to index paper", { error: error instanceof Error ? error.message : String(error) });
   }
 }
 

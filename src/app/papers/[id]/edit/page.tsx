@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 export default function EditPaperPage() {
   const router = useRouter();
@@ -56,7 +57,7 @@ export default function EditPaperPage() {
 
       router.push("/dashboard/submissions");
     } catch (error) {
-      console.error(error);
+      logger.error("Failed to update paper", { error: error instanceof Error ? error.message : String(error) });
     } finally {
       setLoading(false);
     }
@@ -71,7 +72,7 @@ export default function EditPaperPage() {
       if (!res.ok) throw new Error("Failed to submit");
       router.push("/dashboard/submissions");
     } catch (error) {
-      console.error(error);
+      logger.error("Failed to submit paper for review", { error: error instanceof Error ? error.message : String(error) });
     } finally {
       setLoading(false);
     }

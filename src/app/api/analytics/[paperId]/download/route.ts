@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { incrementPaperDownload } from "@/lib/services";
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { logger } from "@/lib/logger";
 
 export async function POST(
   _request: Request,
@@ -18,7 +19,7 @@ export async function POST(
     await incrementPaperDownload(paperId);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Failed to record download:", error);
+    logger.error("Failed to record download", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: "Failed to record download" }, { status: 500 });
   }
 }

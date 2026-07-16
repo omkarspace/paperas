@@ -3,6 +3,7 @@
 import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
+import { logger } from "@/lib/logger";
 
 export default function Error({
   error,
@@ -12,7 +13,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    logger.error("Application error", { error: error.message, digest: error.digest });
   }, [error]);
 
   return (

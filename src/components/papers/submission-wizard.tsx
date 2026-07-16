@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Plus, X } from "lucide-react"
+import { logger } from "@/lib/logger"
 
 type Step = "upload" | "metadata" | "coauthors" | "review"
 
@@ -89,7 +90,7 @@ export function SubmissionWizard() {
         })
 
         if (!uploadRes.ok) {
-          console.error("PDF upload failed, but paper was created")
+          logger.warn("PDF upload failed, but paper was created")
         }
       }
 

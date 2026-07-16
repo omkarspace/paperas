@@ -42,17 +42,17 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // Protect admin pages
+  // Protect admin pages — redirect to dashboard (logged-in) or login (not logged-in)
   if (isAdmin && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/auth/login";
     return Response.redirect(url);
   }
 
-  // Protect reviewer pages
+  // Protect reviewer pages — redirect to dashboard (logged-in) or login (not logged-in)
   if (isReviewer && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/auth/login";
     return Response.redirect(url);
   }
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { logger } from "@/lib/logger";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 
@@ -82,7 +83,7 @@ export async function POST(request: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
     }
-    console.error("Registration error:", error);
+    logger.error("Registration error", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: "Registration failed" }, { status: 500 });
   }
 }

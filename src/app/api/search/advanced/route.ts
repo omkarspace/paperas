@@ -1,9 +1,18 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { PaperStatus } from '@prisma/client'
+import { rateLimit, getClientIp } from '@/lib/utils/rate-limit'
+import { logger } from '@/lib/logger'
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
+  try {
+    const ip = getClientIp(request)
+    const { success } = await rateLimit(ip, 30, 60 * 1000)
+    if (!success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const { searchParams } = new URL(request.url)
   const title = searchParams.get('title') || ''
   const author = searchParams.get('author') || ''
   const categoryId = searchParams.get('categoryId') || ''
@@ -49,4 +58,8 @@ export async function GET(request: Request) {
     page, 
     totalPages: Math.ceil(total / limit) 
   })
+  } catch (error) {
+    logger.error('Failed to search papers', { error: error instanceof Error ? error.message : String(error) })
+    return NextResponse.json({ error: 'Failed to search' }, { status: 500 })
+  }
 }

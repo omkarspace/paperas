@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
 import { notifyReviewerAssigned } from "@/lib/services/notifications";
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { logger } from "@/lib/logger";
 import { z } from "zod";
 
 const assignSchema = z.object({
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
     }
 
     await notifyReviewerAssigned(data.reviewerId, data.paperId, paper.title).catch((err) => {
-      console.error("Failed to send reviewer assignment notification:", err);
+      logger.error("Failed to send reviewer assignment notification", { error: err instanceof Error ? err.message : String(err) });
     });
 
     return NextResponse.json(review, { status: 201 });
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
     }
-    console.error("Assign reviewer error:", error);
+    logger.error("Assign reviewer error", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: "Failed to assign reviewer" }, { status: 500 });
   }
 }

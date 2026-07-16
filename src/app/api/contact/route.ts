@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { logger } from "@/lib/logger";
 import { z } from "zod";
 import { db } from "@/lib/db";
 
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
     }
+    logger.error("Failed to send contact message", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
   }
 }

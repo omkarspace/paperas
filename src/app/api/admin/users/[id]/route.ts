@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
+import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { logger } from "@/lib/logger";
 import { UserRole } from "@prisma/client";
 
 export async function PATCH(
@@ -8,6 +10,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 10, 60 * 1000);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -27,7 +35,8 @@ export async function PATCH(
     });
 
     return NextResponse.json(user);
-  } catch (_error) {
+  } catch (error) {
+    logger.error("Failed to update user", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
 }

@@ -3,8 +3,10 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/shared/status-badge";
+import { EmptyState } from "@/components/shared/empty-state";
+import { FileText } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -17,16 +19,6 @@ export default async function SubmissionsPage() {
     orderBy: { createdAt: "desc" },
     include: { category: true },
   });
-
-  const statusColors: Record<string, string> = {
-    DRAFT: "bg-muted text-muted-foreground border-border",
-    SUBMITTED: "bg-blue-50 text-blue-700 border-blue-200",
-    UNDER_REVIEW: "bg-amber-50 text-amber-700 border-amber-200",
-    REVISION_REQUESTED: "bg-orange-50 text-orange-700 border-orange-200",
-    ACCEPTED: "bg-green-50 text-green-700 border-green-200",
-    PUBLISHED: "bg-purple-50 text-purple-700 border-purple-200",
-    REJECTED: "bg-red-50 text-red-700 border-red-200",
-  };
 
   return (
     <div>
@@ -48,7 +40,7 @@ export default async function SubmissionsPage() {
                     {paper.paperId} • {paper.category?.name || "Uncategorized"}
                   </p>
                 </div>
-                <Badge className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${statusColors[paper.status]}`}>{paper.status.replace("_", " ")}</Badge>
+                <StatusBadge status={paper.status} />
               </CardHeader>
               <CardContent className="flex justify-between items-center">
                 <p className="text-sm text-muted-foreground line-clamp-2 max-w-xl">
@@ -71,12 +63,16 @@ export default async function SubmissionsPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 text-muted-foreground">
-          <p>No submissions yet.</p>
-          <Link href="/papers/submit">
-            <Button className="mt-4">Submit Your First Paper</Button>
-          </Link>
-        </div>
+        <EmptyState
+          icon={<FileText className="h-12 w-12" />}
+          title="No submissions yet"
+          description="Submit your first paper to get started with the publication process."
+          action={
+            <Link href="/papers/submit">
+              <Button>Submit Your First Paper</Button>
+            </Link>
+          }
+        />
       )}
     </div>
   );

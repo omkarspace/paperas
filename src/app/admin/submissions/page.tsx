@@ -3,8 +3,8 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/shared/status-badge";
 import { PaperStatus } from "@prisma/client";
 
 const PAGE_SIZE = 20;
@@ -53,16 +53,6 @@ export default async function AdminSubmissionsPage({
   ]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
-
-  const statusColors: Record<string, string> = {
-    DRAFT: "bg-gray-500",
-    SUBMITTED: "bg-blue-500",
-    UNDER_REVIEW: "bg-yellow-500",
-    REVISION_REQUESTED: "bg-amber-500",
-    ACCEPTED: "bg-green-500",
-    PUBLISHED: "bg-primary",
-    REJECTED: "bg-red-500",
-  };
 
   return (
     <div className="space-y-6">
@@ -121,9 +111,7 @@ export default async function AdminSubmissionsPage({
                   {paper.paperId} • {paper.author?.name}
                 </p>
               </div>
-              <Badge className={statusColors[paper.status]}>
-                {paper.status.replace("_", " ")}
-              </Badge>
+              <StatusBadge status={paper.status} />
             </CardHeader>
             <CardContent className="flex justify-between items-center">
               <p className="text-sm text-muted-foreground line-clamp-1 max-w-xl">

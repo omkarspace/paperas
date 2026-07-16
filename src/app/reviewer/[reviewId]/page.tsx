@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { logger } from "@/lib/logger";
 
 interface ReviewPaper {
   id: string;
@@ -63,7 +64,7 @@ export default function ReviewFormPage() {
 
       router.push("/reviewer/reviews");
     } catch (error) {
-      console.error(error);
+      logger.error("Failed to submit review", { error: error instanceof Error ? error.message : String(error) });
     } finally {
       setLoading(false);
     }

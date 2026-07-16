@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth/auth';
 import { db } from "@/lib/db";
 import { generatePaperId } from "@/lib/utils/utils";
 import { rateLimit, getClientIp } from "@/lib/utils/rate-limit";
+import { logger } from "@/lib/logger";
 import { PaperStatus } from "@prisma/client";
 import { z } from "zod";
 
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
     }
-    console.error(error);
+    logger.error("Failed to create paper", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: "Failed to create paper" }, { status: 500 });
   }
 }

@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 export default function RevisionsPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function RevisionsPage() {
       setPdfUrl(data.url);
       setFile(selectedFile);
     } catch (error) {
-      console.error(error);
+      logger.error("Failed to upload revision file", { error: error instanceof Error ? error.message : String(error) });
       alert("Failed to upload file");
     } finally {
       setUploading(false);
@@ -59,7 +60,7 @@ export default function RevisionsPage() {
       if (!res.ok) throw new Error("Failed to submit revision");
       router.push("/dashboard/submissions");
     } catch (error) {
-      console.error(error);
+      logger.error("Failed to submit revision", { error: error instanceof Error ? error.message : String(error) });
       alert("Failed to submit revision");
     } finally {
       setLoading(false);
